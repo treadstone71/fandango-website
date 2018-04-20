@@ -1,0 +1,14 @@
+{
+  "name": "node_backend",
+  "version": "1.0.0",
+  "description": "This application reads from kafka topic, processes request interacting with databases and writes to another kafka topic",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Project Group 4",
+  "license": "ISC",
+  "dependencies": {
+    "kafka-node": "^2.5.0"
+  }
+}
