@@ -10,6 +10,12 @@ function auth(req, res, next){
 	next();
 }
 
+router.get('/revenue_movies', function(req, res, next){
+	kafka.produce({}, 'revenue_movies', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });

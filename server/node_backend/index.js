@@ -1,10 +1,12 @@
 var kafka = require('kafka-node');
 var loginMethods = require('./login.js');
-
+var adminMethods = require('./admin.js');
+var userMethods = require('./users.js');
+var madminMethods = require('./madmin.js');
 
 function Kafka(){
 	this.producer = new kafka.HighLevelProducer(new kafka.Client("localhost:2181"));
-	this.consumer = new kafka.HighLevelConsumer(new kafka.Client("localhost:2181"), [{topic: 'login_topic'}, {topic: 'project_topic'}], {autoCommit: true});
+	this.consumer = new kafka.HighLevelConsumer(new kafka.Client("localhost:2181"), [{topic: 'login_topic'}, {topic: 'user_topic'}, {topic: 'admin_topic'}, {topic: 'madmin_topic'}], {autoCommit: true});
 	this.startConsuming();
 }
 
@@ -19,6 +21,15 @@ Kafka.prototype.startConsuming = function(){
 		switch(value.replyTo){
 			case "login_res":
 				loginMethods[value.func](value, self.done.bind(self));
+			break;
+			case "admin_res":
+				adminMethods[value.func](value, self.done.bind(self));
+			break;
+			case "user_res":
+				userMethods[value.func](value, self.done.bind(self));
+			break;
+			case "madmin_res":
+				madminMethods[value.func](value, self.done.bind(self));
 			break;
 		}
 	});

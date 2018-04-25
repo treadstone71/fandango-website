@@ -9,6 +9,8 @@
   "author": "Project Group 4",
   "license": "ISC",
   "dependencies": {
-    "kafka-node": "^2.5.0"
+    "kafka-node": "^2.5.0",
+    "mongodb": "^3.0.7",
+    "mysql": "^2.15.0"
   }
 }
