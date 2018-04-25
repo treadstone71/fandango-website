@@ -1,5 +1,6 @@
 import React from 'react';
 import HomePage from '../homepage/HomePage.js';
+import '../../css/userlogin.css';
 
 export default class UserLogin extends React.Component {
     constructor() {
@@ -18,18 +19,18 @@ export default class UserLogin extends React.Component {
         return(
             <div className="container">
                 <HomePage />
-                <div style={{maxWidth: '425px', width: '100%', margin: 'auto'}}>
+                <div className="userlogin">
                     <h1>User Login</h1>
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" />
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
+                            <input type="text" className="form-control" id="username" />
                         </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" />
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input type="password" className="form-control" id="password" />
                         </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" className="btn btn-primary">Login</button>
                     </form>
                 </div>
             </div>
