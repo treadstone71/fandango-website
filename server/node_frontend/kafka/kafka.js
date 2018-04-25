@@ -4,7 +4,7 @@ var crypto = require('crypto');
 function Kafka(){
 	this.producer = new kafka.HighLevelProducer(new kafka.Client("localhost:2181"));
 	this.requests = {};
-	this.consumer = new kafka.HighLevelConsumer(new kafka.Client("localhost:2181"), [{topic: 'login_res'}, {topic: 'project_res'}], {autoCommit: true});
+	this.consumer = new kafka.HighLevelConsumer(new kafka.Client("localhost:2181"), [{topic: 'login_res'}, {topic: 'admin_res'}, {topic: 'madmin_res'}, {topic: 'user_res'}], {autoCommit: true});
 	this.startConsuming();
 }
 

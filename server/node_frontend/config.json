@@ -1,4 +1,4 @@
 {
 	"origin": "http://localhost:3001",
-	"mongodb": "mongodb://projectgroup4:cmpe273@ds251849.mlab.com:51849/fandango"
+	"mongodb": "mongodb://projectgroup4:cmpe-273@ds251849.mlab.com:51849/fandango"
 }
