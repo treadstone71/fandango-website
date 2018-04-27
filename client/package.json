@@ -4,12 +4,15 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "fusioncharts": "^3.12.2",
     "history": "^4.7.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "react-fusioncharts": "^1.0.5",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
+    "reactstrap": "^5.0.0",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0"

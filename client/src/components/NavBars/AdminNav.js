@@ -21,7 +21,7 @@ class AdminNav extends React.Component{
         return(
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
             <div class="container">
-            <a class="navbar-brand" href="/dashboard">Dashboard</a>
+            <a class="navbar-brand" href="/admin/dashboard">Dashboard</a>
             &nbsp;
             <ul class="nav navbar-nav actions navbar-right">
             <li class="dropdown">

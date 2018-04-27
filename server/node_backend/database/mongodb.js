@@ -8,12 +8,12 @@ module.exports = function(cb){
 	// Use connect method to connect to the server
 	if(db) cb(db);
 	else{
-		MongoClient.connect(url, function(err, dbase) {
+		MongoClient.connect(url, function(err, client) {
 		  
 	  		if(err) return console.log(err);
 
 	  		console.log("Connected successfully to mongo server");
-	  		db = dbase;
+	  		db = client.db("fandango");
 	  		cb(db);
 		});
 	}
