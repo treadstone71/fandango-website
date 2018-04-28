@@ -28,6 +28,14 @@ router.get('/get_halls', function(req, res, next){
 	});
 });
 
+router.post('/post_hall', function(req, res, next){
+	console.log(req.body);
+
+	kafka.produce(req.body, 'post_hall', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });

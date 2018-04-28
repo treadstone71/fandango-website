@@ -5,7 +5,8 @@ var api = 'http://localhost:3000';
 export const adminActions = {
     getTopMovies,
     getCitywiseRevenue,
-    getTopHalls
+    getTopHalls,
+    postMovieHall
 };
 
 function getTopMovies(){
@@ -58,6 +59,29 @@ function getTopHalls(){
             }
         }).catch(function(err) {
             dispatch({type: "GETTOPHALLS_FAILURE"})
+        })
+    }
+}
+
+function postMovieHall(data){
+    return dispatch => {
+        axios(api + "/admin/post_hall", {
+            method: "post",
+            data: data,
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "POSTHALL_SUCCESS", hall_id: res.data.hall_id})
+                history.push("/admin/halls/"+res.data.hall_id);
+            } else {
+                if(res.data.msg == "USERNAME_EXISTS"){
+                    dispatch({type: "POSTHALL_FAILURE", dupusername: true});
+                    alert("USERNAME_EXISTS");
+                }
+            }
+        }).catch(function(err) {
+            dispatch({type: "POSTHALL_FAILURE"})
         })
     }
 }

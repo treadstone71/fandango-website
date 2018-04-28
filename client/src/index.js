@@ -9,6 +9,7 @@ import UserLogin from './components/Logins/UserLogin.js';
 import HomePage from './components/homepage/HomePage';
 import AdminLogin from './components/Logins/AdminLogin';
 import AdminDashboard from './components/AdminHome/AdminDashboard';
+import AddMovieHall from './components/AdminHome/AddMovieHall';
 
 import EditProfile from './components/user/EditProfile.js';
 import { Provider } from 'react-redux';
@@ -23,6 +24,7 @@ ReactDOM.render(<Provider store={store}>
 
     <Route path="/adminlogin" component={AdminLogin}/>
     <Route exact path="/admin/dashboard" component={AdminDashboard}/>
+    <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
 
     <Route exact path="/" component={HomePage} />
 

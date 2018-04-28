@@ -19,6 +19,11 @@ export function admin (state = initialState, action){
                 ...state,
                 tophalls: action.tophalls
             }
+        case "POSTHALL_SUCCESS":
+            return {
+                ...state,
+                hall_id: action.hall_id
+            }
         default:
             return state;
     }

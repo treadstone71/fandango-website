@@ -1,7 +1,16 @@
 var adminMethods = {};
 var getConnection = require('./database/mysql');
 var getMongodb = require('./database/mongodb.js');
-var mysql = require('mysql');
+var mysql = require('mysql'); 
+var cryptPassword = require('./crypto.js').cryptPassword;
+var comparePassword = require('./crypto.js').comparePassword;
+
+function getNextSequence(collection, name, cb){
+	collection.findOneAndUpdate({ name }, { $inc : { value : 1}}, function(err, res){
+		if(res)
+			cb(res);
+	});
+}
 
 adminMethods.revenue_movies = function(value, done) {
 	let query = "select movieid, amount from billing";
@@ -163,6 +172,61 @@ adminMethods.get_halls = function(value, done){
 				populate(0, sol, moviehall, function(){
 					return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", "sol": ans}});	
 				});
+			});
+		});
+	});
+}
+
+adminMethods.post_hall = function(value, done){
+	var data = value.data;
+	if(data.username == undefined || data.password == undefined || data.name == undefined || 
+		data.movie_times == undefined || data.num_tickets == undefined || data.screen_number == undefined || data.ticket_price == undefined || 
+		 data.movies == undefined)
+		return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE", msg: "NOT_ENOUGH_INFO"}});
+
+	getMongodb(function(mongodb){
+		var counter = mongodb.collection('counters');
+		let moviehall = mongodb.collection('moviehall');
+		moviehall.find({ username: data.username }).toArray(function(err, ele){
+			if(ele.length != 0 )
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE", msg: "USERNAME_EXISTS"}});
+
+			getNextSequence(counter, 'hall_id', function(res){
+				console.log("nect hallid: ", res.value.value);
+
+				cryptPassword(data.password, function(err, hash){
+					//update movie_times, movies
+					let movie_times = data.movie_times.split(",");
+					let movies = data.movies.split(",");
+					let screen_number = [];
+					for(var i=1; i<=+data.screen_number; i++)
+						screen_number.push(i);
+					for(var i in movies){
+						if(isNaN(+movies[i]))
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+						movies[i] = +movies[i];
+					}
+					let moviehalldoc = {
+						//username, password, hall_id, name, movie_times, num_tickets, screen_number, ticket_price, movies
+						username: data.username,
+						password: hash,
+						hall_id: res.value.value,
+						name: data.name,
+						movie_times: movie_times,//format
+						num_tickets: data.num_tickets,
+						screen_number: screen_number,
+						ticket_price: data.ticket_price,
+						movies: movies//format
+					}
+
+					moviehall.insertOne(moviehalldoc, function(err, res){
+						if(err)
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+						if(res.result.ok == 1)
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", hall_id: moviehalldoc.hall_id}});
+					})
+				});
+				
 			});
 		});
 	});
