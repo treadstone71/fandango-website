@@ -23,15 +23,15 @@ class AdminNav extends React.Component{
             <div class="container">
             <a class="navbar-brand" href="/admin/dashboard">Dashboard</a>
             &nbsp;
-            <ul class="nav navbar-nav actions navbar-right">
+            <ul class="nav navbar-nav actions ml-auto">
             <li class="dropdown">
             <a class="btn btn-primary dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
             Admin
            </a>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="add-movie">Add Movie</a></li>
-            <li><a class="dropdown-item" href="add-movie-hall">Add Movie Hall</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="/admin/add-movie-hall">Add Movie Hall</a></li>
+            <li><a class="dropdown-item" href="/admin/search-movie-hall">Search Movie/Hall</a></li>
+            <li><a class="dropdown-item" href="/admin/search-users-bills">Search Users/Bills</a></li>
         </ul>
         </li>
             </ul>
