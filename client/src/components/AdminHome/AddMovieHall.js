@@ -16,7 +16,18 @@ class MovieHall extends React.Component{
     onChange(e){
         console.log(e.target.id);
         const {name, value} = e.target;
-        this.setState({ [name]: value });
+        console.log(name, value);
+        if(name == "file"){
+            var data = new FormData();
+            data.append('file', e.target.files[0]);
+            data.append('name', 'file');
+            data.append('description', 'some value user types');
+            console.log("update");
+            this.setState({ [name]: data });
+        } else {
+            this.setState({ [name]: value });
+        }
+        
     }
 
     onClick(e){
@@ -43,6 +54,13 @@ class MovieHall extends React.Component{
                 <FormGroup>
                   <Label for="name">Hall Name</Label>
                   <Input name="name" id="name" placeholder="Enter Hall Name..." onChange={this.onChange}/>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="file">Upload Image</Label>
+                  <Input type="file" name="file" id="file" onChange={this.onChange}/>
+                  <FormText color="muted">
+                  Only .jpg images
+                    </FormText>
                 </FormGroup>
                 <FormGroup>
                   <Label for="movie_times">Movie Times</Label>

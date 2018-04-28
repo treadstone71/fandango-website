@@ -72,8 +72,17 @@ function postMovieHall(data){
         }).then(function(res){
             console.log(res.data);
             if(res.data && res.data.status == "SUCCESS"){
-                dispatch({type: "POSTHALL_SUCCESS", hall_id: res.data.hall_id})
-                history.push("/admin/halls/"+res.data.hall_id);
+                let hall_id = res.data.hall_id;
+                axios(api + "/hallimage?hall_id=" + hall_id, {
+                    method: "post",
+                    data: data.file,
+                    withCredentials: true
+                }).then(function(res){
+                    console.log("Res in upload", res)
+                    history.push("/admin/halls/"+hall_id);
+                }).catch(function(err) {
+                    console.log("error in upload ", err);
+                })
             } else {
                 if(res.data.msg == "USERNAME_EXISTS"){
                     dispatch({type: "POSTHALL_FAILURE", dupusername: true});
