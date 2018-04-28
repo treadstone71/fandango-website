@@ -1,6 +1,7 @@
 var adminMethods = {};
 var getConnection = require('./database/mysql');
 var getMongodb = require('./database/mongodb.js');
+var mysql = require('mysql');
 
 adminMethods.revenue_movies = function(value, done) {
 	let query = "select movieid, amount from billing";
@@ -50,6 +51,70 @@ adminMethods.revenue_movies = function(value, done) {
 				var movies = mongodb.collection("movies");
 				populate(0, sol, movies, function(){
 					return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", "sol": ans}});	
+				});
+			});
+		});
+	});
+}
+
+adminMethods.city_revenue = function(value, done){
+	let movietitle = value.data.movie_title;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection("movies");
+		console.log(JSON.stringify({ title : movietitle}));
+		movies.find({ title : movietitle}).toArray(function(err, ele){
+			if(err || ele.length == 0){
+				console.log("fail", ele);
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});	
+			}
+			let movie_id = ele[0].movie_id;
+			let query = "select * from billing where movieid = " + mysql.escape(movie_id) + ";";
+			getConnection(function(err,conn){
+				if(err){
+					return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+				}
+
+				conn.query(query, function(err, results){
+					console.log(results);
+					if(results.length == 0){
+						return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+					}
+
+					let revenueperuser = {};
+					let userids = [];
+					for(var i in results){
+						if(!revenueperuser.hasOwnProperty(results[i].userid)){
+							revenueperuser[results[i].userid] = 0;
+							userids.push(results[i].userid);
+						}
+						revenueperuser[results[i].userid] += +results[i].amount;
+					}
+
+					let list = "";
+					for(var i in userids){
+						if(i==userids.length-1) break;
+						list = list + userids[i] + ",";
+					}
+					let query = "";
+					if(list === "")
+						query = "select city, userid from users where userid in (" + mysql.escape(userids[userids.length-1]) + ");"
+					else
+						query = "select city, userid from users where userid in (" + list + userids[userids.length-1] + ");"
+					console.log("query: ", query);
+					getConnection(function(err, conn){
+						conn.query(query, function(err, results){
+							console.log("require: ", results);
+							let ans = {};
+							for(var i in results){
+								if(!ans.hasOwnProperty(results[i].city)){
+									ans[results[i].city] = 0;
+								}
+								ans[results[i].city] += revenueperuser[results[i].userid];
+							}
+							console.log(ans);
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", ans }});
+						});
+					})
 				});
 			});
 		});

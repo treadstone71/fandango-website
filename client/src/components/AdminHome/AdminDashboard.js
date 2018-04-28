@@ -2,6 +2,18 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButtonDropdown,
+  InputGroupDropdown,
+  Input,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+ } from 'reactstrap';
+
 import classnames from 'classnames';
 
 import AdminNav from "../NavBars/AdminNav";
@@ -11,44 +23,6 @@ import FusionCharts from 'fusioncharts';
 import Charts from 'fusioncharts/fusioncharts.charts';
 import ReactFC from 'react-fusioncharts';
 Charts(FusionCharts);
-var myDataSource = {
-        chart: {
-            caption: "Age profile of website visitors",
-            subcaption: "Last Year",
-            startingangle: "120",
-            showlabels: "0",
-            showlegend: "1",
-            enablemultislicing: "0",
-            slicingdistance: "15",
-            showpercentvalues: "1",
-            showpercentintooltip: "0",
-            plottooltext: "Age group : $label Total visit : $datavalue",
-            theme: "ocean"
-        },
-        data: [{
-            label: "Teenage",
-            value: "1250400"
-        }, {
-            label: "Adult",
-            value: "1463300"
-        }, {
-            label: "Mid-age",
-            value: "1050700"
-        }, {
-            label: "Senior",
-            value: "491000"
-        }]
-    };
-
-    var chartConfigs = {
-        id: "age-profile-chart",
-        renderAt: "age-profile-chart-container",
-        type: "pie3d",
-        width: 500,
-        height: 400,
-        dataFormat: "json",
-        dataSource: myDataSource
-    };
 
 class Dashboard extends React.Component{
 	
@@ -56,8 +30,11 @@ class Dashboard extends React.Component{
 	    super(props);
 
 	    this.toggle = this.toggle.bind(this);
+	    this.onClick = this.onClick.bind(this);
+	    this.onChange = this.onChange.bind(this);
 	    this.state = {
-	        activeTab: '1'
+	        activeTab: '1',
+	        moviename: ''
 	    };
 	}
 
@@ -69,6 +46,16 @@ class Dashboard extends React.Component{
 	    }
 	}
 
+	onChange(e){
+		this.setState({moviename: e.target.value})
+	}
+
+	onClick(e){
+		console.log(this.state.moviename);
+		const { dispatch } = this.props;
+		dispatch(adminActions.getCitywiseRevenue(this.state.moviename));
+	}
+
 	componentDidMount(){
 		const { dispatch } = this.props;
 		dispatch(adminActions.getTopMovies());
@@ -78,11 +65,11 @@ class Dashboard extends React.Component{
 	  	const { admin } = this.props;
 
 	  	let topmoviesele = null;
+	  	let citywiseele = null;
 	  	if(admin.topmovies){
 	  		let dataSource = {
 		        chart: {
 		            caption: "Top 10 movies with Revenue",
-		            subcaption: "Last Year",
 		            numberPrefix:"$",
 		            plottooltext: "Movie : $label Total Revenue : $datavalue",
 		            theme: "ocean"
@@ -100,6 +87,32 @@ class Dashboard extends React.Component{
 		    };
 
 		    topmoviesele = < ReactFC {...chartConfigs} />
+	  	}
+	  	if(admin.citywiselist){
+	  		let data = [];
+	  		for(let key in admin.citywiselist)
+	  			data.push({label: key, value: admin.citywiselist[key]})
+
+	  		let dataSource = {
+		        chart: {
+		            caption: "City Wise Revenue",
+		            numberPrefix:"$",
+		            plottooltext: "City : $label Total Revenue : $datavalue",
+		            theme: "ocean"
+		        },
+		        data
+		    };
+		    let chartConfigs = {
+		        id: "citywise-revenue-chart",
+		        renderAt: "citywise-revenue-chart-container",
+		        type: "column2d",
+		        width: "80%",
+		        height: 400,
+		        dataFormat: "json",
+		        dataSource: dataSource
+		    };
+
+	  		citywiseele = < ReactFC {...chartConfigs} />
 	  	}
 
 	    return (
@@ -130,7 +143,11 @@ class Dashboard extends React.Component{
 	          {topmoviesele}
 	          </TabPane>
 	          <TabPane tabId="2">
-	            yoyomA2
+	            <InputGroup>
+		          <Input onChange={this.onChange} placeholder="Type a Movie Name......"/>
+		          <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick}>Search Movie</Button></InputGroupAddon>
+		        </InputGroup>
+		        {citywiseele}
 	          </TabPane>
 	          <TabPane tabId="3">
 	            yoyomA2

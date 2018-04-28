@@ -9,6 +9,11 @@ export function admin (state = initialState, action){
                 topmovies: action.topmovies
             }
             break;
+        case "GETCITY_SUCCESS":
+            return {
+                ...state,
+                citywiselist: action.citywiselist
+            }
         default:
             return state;
     }
