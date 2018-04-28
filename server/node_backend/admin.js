@@ -61,7 +61,7 @@ adminMethods.city_revenue = function(value, done){
 	let movietitle = value.data.movie_title;
 	getMongodb(function(mongodb){
 		var movies = mongodb.collection("movies");
-		console.log(JSON.stringify({ title : movietitle}));
+		// console.log(JSON.stringify({ title : movietitle}));
 		movies.find({ title : movietitle}).toArray(function(err, ele){
 			if(err || ele.length == 0){
 				console.log("fail", ele);
@@ -75,7 +75,7 @@ adminMethods.city_revenue = function(value, done){
 				}
 
 				conn.query(query, function(err, results){
-					console.log(results);
+					// console.log(results);
 					if(results.length == 0){
 						return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
 					}
@@ -100,10 +100,10 @@ adminMethods.city_revenue = function(value, done){
 						query = "select city, userid from users where userid in (" + mysql.escape(userids[userids.length-1]) + ");"
 					else
 						query = "select city, userid from users where userid in (" + list + userids[userids.length-1] + ");"
-					console.log("query: ", query);
+					// console.log("query: ", query);
 					getConnection(function(err, conn){
 						conn.query(query, function(err, results){
-							console.log("require: ", results);
+							// console.log("require: ", results);
 							let ans = {};
 							for(var i in results){
 								if(!ans.hasOwnProperty(results[i].city)){
@@ -111,10 +111,57 @@ adminMethods.city_revenue = function(value, done){
 								}
 								ans[results[i].city] += revenueperuser[results[i].userid];
 							}
-							console.log(ans);
+							// console.log(ans);
 							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", ans }});
 						});
 					})
+				});
+			});
+		});
+	});
+}
+
+adminMethods.get_halls = function(value, done){
+	let query = "select * from billing";
+	getConnection(function(err, conn){
+		conn.query(query, function(err, results){
+			// console.log("require: ", results);
+			let sol = {};
+			for(var i in results){
+				if(!sol.hasOwnProperty(results[i].moviehallid))
+					sol[results[i].moviehallid] = 0;
+
+				sol[results[i].moviehallid] += +results[i].numtickets;
+			}
+
+			var sortable = [];
+			for (var moviehallid in sol) {
+			    sortable.push([moviehallid, sol[moviehallid]]);
+			}
+
+			sortable.sort(function(a, b) {
+			    return -(a[1] - b[1]);
+			});
+
+			sol = sortable.slice(0, 10);
+			var ans = [];
+			function populate(i, sol, moviehall, cb){
+				if(i == sol.length)
+					return cb();
+
+				moviehall.find({ hall_id: +sol[i][0] }).toArray(function(err, ele){
+					let m = [];
+					m.push(ele[0].name);
+					m.push(sol[i][1]);
+					ans.push(m);
+					populate(i+1, sol, moviehall, cb);
+				});
+
+			}
+			getMongodb(function(mongodb){
+				var moviehall = mongodb.collection("moviehall");
+				populate(0, sol, moviehall, function(){
+					return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", "sol": ans}});	
 				});
 			});
 		});

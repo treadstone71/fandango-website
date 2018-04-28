@@ -59,6 +59,7 @@ class Dashboard extends React.Component{
 	componentDidMount(){
 		const { dispatch } = this.props;
 		dispatch(adminActions.getTopMovies());
+		dispatch(adminActions.getTopHalls());
 	}
 
   	render() {
@@ -66,6 +67,7 @@ class Dashboard extends React.Component{
 
 	  	let topmoviesele = null;
 	  	let citywiseele = null;
+	  	let tophallsele = null;
 	  	if(admin.topmovies){
 	  		let dataSource = {
 		        chart: {
@@ -74,7 +76,7 @@ class Dashboard extends React.Component{
 		            plottooltext: "Movie : $label Total Revenue : $datavalue",
 		            theme: "ocean"
 		        },
-		        data: admin.topmovies.map(movie => ({ label: movie[0], value: movie[1] }))
+		        data: admin.topmovies.map(movie => ({ label: movie[0], value: Math.round(+movie[1]*100)/100 }))
 		    };
 		    let chartConfigs = {
 		        id: "movies-revenue-chart",
@@ -91,7 +93,7 @@ class Dashboard extends React.Component{
 	  	if(admin.citywiselist){
 	  		let data = [];
 	  		for(let key in admin.citywiselist)
-	  			data.push({label: key, value: admin.citywiselist[key]})
+	  			data.push({label: key, value: Math.round(+admin.citywiselist[key]*100)/100})
 
 	  		let dataSource = {
 		        chart: {
@@ -113,6 +115,31 @@ class Dashboard extends React.Component{
 		    };
 
 	  		citywiseele = < ReactFC {...chartConfigs} />
+	  	}
+	  	if(admin.tophalls){
+	  		let data = [];
+	  		for(let i in admin.tophalls)
+	  			data.push({label: admin.tophalls[i][0], value: admin.tophalls[i][1]})
+
+	  		let dataSource = {
+		        chart: {
+		            caption: "Top Halls That Sold Most Tickets",
+		            plottooltext: "Movie Hall : $label Total Revenue : $datavalue",
+		            theme: "ocean"
+		        },
+		        data
+		    };
+		    let chartConfigs = {
+		        id: "hallwise-revenue-chart",
+		        renderAt: "hallwise-revenue-chart-container",
+		        type: "pie3d",
+		        width: "80%",
+		        height: 400,
+		        dataFormat: "json",
+		        dataSource: dataSource
+		    };
+
+	  		tophallsele = < ReactFC {...chartConfigs} />
 	  	}
 
 	    return (
@@ -150,7 +177,7 @@ class Dashboard extends React.Component{
 		        {citywiseele}
 	          </TabPane>
 	          <TabPane tabId="3">
-	            yoyomA2
+	            {tophallsele}
 	          </TabPane>
 	        </TabContent>
 	        </div><div class="col-sm-1"></div></div></div>

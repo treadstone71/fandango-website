@@ -4,7 +4,8 @@ var api = 'http://localhost:3000';
 
 export const adminActions = {
     getTopMovies,
-    getCitywiseRevenue
+    getCitywiseRevenue,
+    getTopHalls
 };
 
 function getTopMovies(){
@@ -39,6 +40,24 @@ function getCitywiseRevenue(movie){
             }
         }).catch(function(err) {
             dispatch({type: "GETCITY_FAILURE"})
+        })
+    }
+}
+
+function getTopHalls(){
+    return dispatch => {
+        axios(api + "/admin/get_halls", {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETTOPHALLS_SUCCESS", tophalls: res.data.sol})
+            } else {
+                dispatch({type: "GETTOPHALLS_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETTOPHALLS_FAILURE"})
         })
     }
 }

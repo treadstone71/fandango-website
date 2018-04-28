@@ -20,7 +20,13 @@ router.get('/city_revenue', function(req, res, next){
 	kafka.produce({ movie_title : req.query.movie}, 'city_revenue', 'admin_topic', 'admin_res', function(value){
 		res.send(JSON.stringify(value));
 	});
-})
+});
+
+router.get('/get_halls', function(req, res, next){
+	kafka.produce({}, 'get_halls', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
 
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));

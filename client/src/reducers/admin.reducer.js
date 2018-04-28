@@ -14,6 +14,11 @@ export function admin (state = initialState, action){
                 ...state,
                 citywiselist: action.citywiselist
             }
+        case "GETTOPHALLS_SUCCESS":
+            return {
+                ...state,
+                tophalls: action.tophalls
+            }
         default:
             return state;
     }
