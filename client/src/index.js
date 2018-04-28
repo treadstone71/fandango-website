@@ -8,7 +8,6 @@ import { history } from './_helpers/history.js';
 import UserLogin from './components/Logins/UserLogin.js';
 import HomePage from './components/homepage/HomePage';
 import AdminLogin from './components/Logins/AdminLogin';
-import AdminHome from './components/AdminHome/AdminHome';
 import AdminDashboard from './components/AdminHome/AdminDashboard';
 
 import EditProfile from './components/user/EditProfile.js';
@@ -23,7 +22,6 @@ ReactDOM.render(<Provider store={store}>
     <Route path="/editprofile" component={EditProfile}/>
 
     <Route path="/adminlogin" component={AdminLogin}/>
-    <Route path="/adminhome" component={AdminHome}/>
     <Route exact path="/admin/dashboard" component={AdminDashboard}/>
 
     <Route exact path="/" component={HomePage} />
