@@ -1,6 +1,8 @@
 import React from 'react';
 import MainNav from '../../mainNav.js';
 
+import { Link } from 'react-router-dom';
+
 class HomePage extends React.Component{
     constructor(){
         super();
@@ -18,7 +20,7 @@ class HomePage extends React.Component{
                         <div class="card-body">
                             <h5 class="card-title">Movie title</h5>
                             <p class="card-text">Movie Description</p>
-                            <a href="#" class="btn btn-primary">Buy Tickets</a>
+                            <Link to="/movie/23333" class="btn btn-primary">Buy Tickets</Link>
                         </div>
                     </div>
                     </div>

@@ -12,6 +12,7 @@ import AdminDashboard from './components/AdminHome/AdminDashboard';
 import AddMovieHall from './components/AdminHome/AddMovieHall';
 
 import EditProfile from './components/user/EditProfile.js';
+import MoviePage from './components/homepage/MoviePage';
 import { Provider } from 'react-redux';
 import { store } from './_helpers/store.js';
 import { Router, Route, Link, Redirect } from 'react-router-dom';
@@ -27,6 +28,7 @@ ReactDOM.render(<Provider store={store}>
     <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
 
     <Route exact path="/" component={HomePage} />
+    <Route path="/movie/:id" component={MoviePage} />
 
     </div>
     </Router>
