@@ -8,7 +8,9 @@ export const adminActions = {
     getTopHalls,
     getMovie,
     UpdateMovieInfo,
-    postMovieHall
+    postMovieHall,
+    getMovieHall,
+    UpdateMovieHallInfo
 };
 
 function getTopMovies(){
@@ -86,6 +88,24 @@ function getMovie(movie){
     }
 }
 
+function getMovieHall(name){
+    return dispatch =>{
+        axios(api + "/admin/get_movie_hall?name=" + name, {
+            method: "get",
+            withCredentials: true
+        }).then (function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                console.log("inside get movie hall res", res.data.name);
+                dispatch({type: "GET_MOVIE_HALL_SUCCESS", name: res.data.name})
+            }
+            }).catch(function(err){
+            alert("Movie hall not found");
+            dispatch({type: "GET_MOVIE_HALL_FAILURE"})
+        })
+    }
+}
+
 function UpdateMovieInfo(movie_info, movie_id) {
     console.log("in update movie info", movie_info);
     var data = {
@@ -141,5 +161,32 @@ function postMovieHall(data){
         }).catch(function(err) {
             dispatch({type: "POSTHALL_FAILURE"})
         })
+    }
+}
+
+function UpdateMovieHallInfo(hall_info, hall_id){
+    console.log("inside update movie hall", hall_info);
+    var data = {
+        username: hall_info.username,
+        name: hall_info.name,
+        movie_times: hall_info.movie_times,
+        num_tickets: hall_info.num_tickets,
+        screen_number: hall_info.screen_number,
+        ticket_price: hall_info.ticket_price,
+        movies: hall_info.movies
+    }
+    return dispatch =>{
+        axios(api + "/admin/moviehall/update_movie_hall_info?hall_id=" + hall_id,{
+            method: "post",
+            data: data,
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            dispatch({type: "UPDATE_MOVIE_HALL_INFO_SUCCESS"})
+            alert("Movie hall Updated");
+            history.push('/admin/search-movie-hall');
+        }).catch(function(err){
+            dispatch({type: "UPDATE_MOVIE_HALL_INFO_FAILURE"})
+        });
     }
 }

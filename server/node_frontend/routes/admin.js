@@ -34,6 +34,12 @@ router.get('/get_movie', function(req, res, next){
 	});
 });
 
+router.get('/get_movie_hall', function(req, res, next){
+	kafka.produce({name : req.query.name}, 'get_movie_hall', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 router.get('/movie/get_movie_info', function(req,res, next){
 	kafka.produce({movie_id: req.query.movie_id}, 'get_movie_info', 'admin_topic', 'admin_res', function(value){
 		res.send(JSON.stringify(value));
@@ -46,6 +52,11 @@ router.post('/movie/update_movie_info', function(req,res,next){
     });
 });
 
+router.get('/moviehall/get_movie_hall_info', function(req, res, next){
+	kafka.produce({hall_id: req.query.hall_id}, 'get_movie_hall_info', 'admin_topic', 'admin_res', function(value){
+        res.send(JSON.stringify(value));
+	});
+});
 
 router.post('/post_hall', function(req, res, next){
 	console.log(req.body);
@@ -53,6 +64,13 @@ router.post('/post_hall', function(req, res, next){
 		res.send(JSON.stringify(value));
 	});
 });
+
+router.post('/moviehall/update_movie_hall_info', function(req,res,next){
+    kafka.produce({body: req.body, hall_id: req.query.hall_id}, 'update_movie_hall_info', 'admin_topic', 'admin_res', function(value){
+        res.send(JSON.stringify(value));
+    });
+});
+
 
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));

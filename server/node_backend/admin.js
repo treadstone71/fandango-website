@@ -304,4 +304,78 @@ adminMethods.post_hall = function(value, done){
 	});
 }
 
+adminMethods.get_movie_hall = function(value, done){
+	console.log("inside req for get movie hall", value.data);
+	let name = value.data.name;
+	getMongodb(function(mongodb){
+		var moviehall = mongodb.collection('moviehall');
+		moviehall.find({name : name}).toArray(function(err, list){
+			if(err){
+				console.log('error in movie hall', err);
+			}
+			var name = {
+				"hall_id":list[0].hall_id,
+				"username":list[0].username,
+				"password":list[0].password,
+				"name":list[0].name,
+				"num_tickets":list[0].num_tickets,
+			}
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", name }});
+		})
+	});
+}
+
+adminMethods.get_movie_hall_info = function(value, done){
+	console.log("inside req for get hall info", value.data);
+	let hallid = value.data.hall_id;
+	getMongodb(function(mongodb){
+		var moviehall = mongodb.collection('moviehall');
+		moviehall.find({ hall_id: +hallid }).toArray(function(err, list){
+			if(err){
+				console.log("error", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			var hall_info = {
+				'hall_id': list[0].hall_id,
+				'username': list[0].username,
+				'password':list[0].password,
+				'name':list[0].name,
+				'movie_times': list[0].movie_times,
+				'num_tickets': list[0].num_tickets,
+				'screen_number': list[0].screen_number,
+				'ticket_price': list[0].ticket_price,
+				'movies': list[0].movies
+			}
+            	return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", hall_info }});
+		})
+	});
+}
+
+adminMethods.update_movie_hall_info = function(value, done){
+    console.log('inside update movie hall info', value.data);
+    var data = value.data.body;
+    var hallid = value.data.hall_id;
+    getMongodb(function(mongodb){
+        var moviehall = mongodb.collection('moviehall');
+        set = {
+        	username: value.data.body.username,
+			name: value.data.body.name,
+			movie_times: value.data.body.movie_times,
+			num_tickets: value.data.body.num_tickets,
+			screen_number: value.data.body.screen_number,
+			ticket_price: value.data.body.ticket_price,
+			movies: value.data.body.movies
+		}
+		moviehall.findOneAndUpdate({hall_id: +hallid }, {"$set": set}, function(err, res){
+            console.log("res in update hall", arguments);
+            if (err) {
+                console.log("error in update movie info", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+            }
+            console.log(res);
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS"}});
+		});
+	});
+}
+
 module.exports = adminMethods;

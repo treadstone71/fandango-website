@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { history } from './_helpers/history.js';
-//import Login from './components/Logins/login.js';
+
 import UserLogin from './components/Logins/UserLogin.js';
 import HomePage from './components/homepage/HomePage';
 import AdminLogin from './components/Logins/AdminLogin';
@@ -13,6 +13,7 @@ import AddMovieHall from './components/AdminHome/AddMovieHall';
 
 import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
+import MovieHallDetails from './components/AdminHome/MovieHallDetails';
 
 import EditProfile from './components/user/EditProfile.js';
 import { Provider } from 'react-redux';
@@ -31,8 +32,8 @@ ReactDOM.render(
     <Route path = "/admin/search-movie-hall" component={SearchMovieHall} />
     <Route path = "/admin/movie/:movie_id" component={MovieDetails} />
     <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
-
     <Route exact path="/" component={HomePage} />
+    <Route path = '/admin/moviehall/:hall_id' component={MovieHallDetails} />
 
     </div>
     </Router>

@@ -49,7 +49,7 @@ class SearchMovieHall extends React.Component{
     onClick1(e){
         console.log(this.state.moviehallname);
         const {dispatch} = this.props;
-        dispatch(adminActions.getMoviehall(this.state.moviehallname));
+        dispatch(adminActions.getMovieHall(this.state.moviehallname));
     }
 
     toggle(tab) {
@@ -109,6 +109,46 @@ class SearchMovieHall extends React.Component{
             </div>
             </div>
         }
+        if(admin.name){
+            let details = admin.name;
+            moviehallEle =
+        <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                <div class='row'>
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-6">
+                <div class="">
+                <div class="row">
+                <div class="col-sm-6">
+                <img src= "" alt="" class="img-rounded img-responsive" />
+                </div>
+                <div class="col-sm-6">
+                <a href={"/admin/moviehall/" + details.hall_id}><h4>{details.hall_id}</h4></a>
+            <p>
+            <label> User of Hall : </label>
+            {details.username}
+            </p>
+            <p>
+            <label>Name of Hall : </label>
+
+            {details.name}
+        </p>
+            <p>
+            <label>Total Tickets in Hall : </label>
+            {details.num_tickets}
+        </p>
+            </div>
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-3">
+                </div>
+                </div>
+                </div>
+                </div>
+
+        }
 
         return(
             <div>
@@ -154,6 +194,8 @@ class SearchMovieHall extends React.Component{
             &nbsp;
          <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick1}>Search Movie Hall</Button></InputGroupAddon>
         </InputGroup>
+            <br />
+        { moviehallEle}
         </TabPane>
             </TabContent>
             </div>

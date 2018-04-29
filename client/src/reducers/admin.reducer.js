@@ -27,10 +27,21 @@ export function admin (state = initialState, action){
                     movie: action.movie
                 }
                 break;
+                case "GET_MOVIE_HALL_SUCCESS":
+                    return {
+                        ...state,
+                        name: action.name
+                    }
+                    break;
                     case "UPDATE_MOVIE_INFO_SUCCESS":
                         return {
                             ...state
                         }
+                        break;
+                    case "UPDATE_MOVIE_HALL_INFO_SUCCESS":
+                        return {
+                            ...state
+                    }
                         break;
         case "POSTHALL_SUCCESS":
             return {
