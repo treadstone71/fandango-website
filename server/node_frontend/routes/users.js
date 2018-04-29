@@ -15,7 +15,7 @@ router.get('/user', auth, function(req, res, next){
 });
 
 router.get('/user/register', function(req, res, next){
-	kafka.produce({id: 1004, email: 'qili@hotmail.com', password:'1234'}, 'register_user', 'user_topic', 'user_res', function(value){
+	kafka.produce({username: 'qili@hotmail.com', password:'1234'}, 'register_user', 'user_topic', 'user_res', function(value){
 		res.send(JSON.stringify(value));
 	});
 });
