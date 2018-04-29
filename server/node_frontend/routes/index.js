@@ -2,6 +2,19 @@ var express = require('express');
 var router = express.Router();
 var passport = require('../passport.js');
 var kafka = require('../kafka/kafka')();
+var multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, './images/hallimages');
+	},
+	filename: function (req, file, cb) {
+		console.log("filename: ", req.query.hall_id);
+		cb(null, req.query.hall_id + '.jpg');
+	}
+});
+
+const upload = multer({ storage });
 
 function auth(req, res, next){
 	console.log(req.user);
@@ -23,4 +36,8 @@ router.get('/logout', auth, function(req, res, next){
 	res.send({status: "SUCCESS"});
 });
 
+router.post('/hallimage', upload.single('file'), function(req, res, next){
+	console.log("profile hall upload success");
+	res.send({status: "SUCCESS"});
+});
 module.exports = router;

@@ -10,12 +10,18 @@ import HomePage from './components/homepage/HomePage';
 import AdminLogin from './components/Logins/AdminLogin';
 import AdminDashboard from './components/AdminHome/AdminDashboard';
 
+import SearchMovieHall from './components/AdminHome/SearchMovieHall';
+import MovieDetails from './components/AdminHome/MovieDetails';
+
+import AddMovieHall from './components/AdminHome/AddMovieHall';
+
 import EditProfile from './components/user/EditProfile.js';
 import { Provider } from 'react-redux';
 import { store } from './_helpers/store.js';
 import { Router, Route, Link, Redirect } from 'react-router-dom';
 
-ReactDOM.render(<Provider store={store}>
+ReactDOM.render(
+    <Provider store={store}>
     <Router history={history}>
     <div>
     <Route path="/userlogin" component={UserLogin}/>
@@ -23,6 +29,9 @@ ReactDOM.render(<Provider store={store}>
 
     <Route path="/adminlogin" component={AdminLogin}/>
     <Route exact path="/admin/dashboard" component={AdminDashboard}/>
+    <Route path = "/admin/search-movie-hall" component={SearchMovieHall} />
+    <Route path = "/admin/movie/:movie_id" component={MovieDetails} />
+    <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
 
     <Route exact path="/" component={HomePage} />
 

@@ -1,7 +1,16 @@
 var adminMethods = {};
 var getConnection = require('./database/mysql');
 var getMongodb = require('./database/mongodb.js');
-var mysql = require('mysql');
+var mysql = require('mysql'); 
+var cryptPassword = require('./crypto.js').cryptPassword;
+var comparePassword = require('./crypto.js').comparePassword;
+
+function getNextSequence(collection, name, cb){
+	collection.findOneAndUpdate({ name }, { $inc : { value : 1}}, function(err, res){
+		if(res)
+			cb(res);
+	});
+}
 
 adminMethods.revenue_movies = function(value, done) {
 	let query = "select movieid, amount from billing";
@@ -163,6 +172,132 @@ adminMethods.get_halls = function(value, done){
 				populate(0, sol, moviehall, function(){
 					return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", "sol": ans}});	
 				});
+			});
+		});
+	});
+}
+
+adminMethods.get_movie = function(value, done){
+	console.log("inside req for get movie", value.data);
+	let movietitle = value.data.movie_title;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection('movies');
+		movies.find({ title: movietitle}).toArray(function(err, list){
+			if(err){
+                console.log("fail", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			var movie = {
+				"movie_id": list[0].movie_id,
+				"title": list[0].title,
+				"trailer": list[0].trailer,
+				"characters": list[0].characters,
+				"date": list[0].date,
+				"movie_length": list[0].movie_length,
+				"seeitin": list[0].seeitin
+			}
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", movie }});
+		})
+	});
+}
+
+adminMethods.get_movie_info = function(value, done){
+	console.log("inside req for get movie info ", value.data);
+	let movieid = value.data.movie_id;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection('movies');
+		movies.find({movie_id: +movieid}).toArray(function(err, list){
+			if(err){
+				console.log("fail", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			var movie_info = {
+                "movie_id": list[0].movie_id,
+                "title": list[0].title,
+                "trailer": list[0].trailer,
+                "characters": list[0].characters,
+                "date": list[0].date,
+                "movie_length": list[0].movie_length,
+                "seeitin": list[0].seeitin
+			}
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", movie_info }});
+		})
+	});
+}
+
+adminMethods.update_movie_info = function(value, done){
+	console.log('inside update movie info', value.data);
+	var data = value.data.body;
+	var movieid = value.data.movie_id;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection('movies');
+		set = {
+			title:value.data.body.title,
+			trailer: value.data.body.trailer,
+			movie_length: value.data.body.movie_length,
+			date: value.data.body.date,
+			characters: value.data.body.characters.split(",")
+		}
+		movies.findOneAndUpdate({ movie_id: +movieid }, { "$set": set}, function(err, res){
+			console.log("res in update profile",arguments);
+			if(err){
+				console.log("error in update movie info", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			console.log(res);
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS"}});
+		})
+
+adminMethods.post_hall = function(value, done){
+	var data = value.data;
+	if(data.username == undefined || data.password == undefined || data.name == undefined || 
+		data.movie_times == undefined || data.num_tickets == undefined || data.screen_number == undefined || data.ticket_price == undefined || 
+		 data.movies == undefined)
+		return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE", msg: "NOT_ENOUGH_INFO"}});
+
+	getMongodb(function(mongodb){
+		var counter = mongodb.collection('counters');
+		let moviehall = mongodb.collection('moviehall');
+		moviehall.find({ username: data.username }).toArray(function(err, ele){
+			if(ele.length != 0 )
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE", msg: "USERNAME_EXISTS"}});
+
+			getNextSequence(counter, 'hall_id', function(res){
+				console.log("nect hallid: ", res.value.value);
+
+				cryptPassword(data.password, function(err, hash){
+					//update movie_times, movies
+					let movie_times = data.movie_times.split(",");
+					let movies = data.movies.split(",");
+					let screen_number = [];
+					for(var i=1; i<=+data.screen_number; i++)
+						screen_number.push(i);
+					for(var i in movies){
+						if(isNaN(+movies[i]))
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+						movies[i] = +movies[i];
+					}
+					let moviehalldoc = {
+						//username, password, hall_id, name, movie_times, num_tickets, screen_number, ticket_price, movies
+						username: data.username,
+						password: hash,
+						hall_id: res.value.value,
+						name: data.name,
+						movie_times: movie_times,//format
+						num_tickets: data.num_tickets,
+						screen_number: screen_number,
+						ticket_price: data.ticket_price,
+						movies: movies//format
+					}
+
+					moviehall.insertOne(moviehalldoc, function(err, res){
+						if(err)
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+						if(res.result.ok == 1)
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", hall_id: moviehalldoc.hall_id}});
+					})
+				});
+				
 			});
 		});
 	});
