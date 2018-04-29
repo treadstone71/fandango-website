@@ -15,7 +15,7 @@ export default class MovieHall extends React.Component {
                             </div>
                             <div className="col-7">
                                 {[1,2,3,4,5].map((t) => 
-                                    <span className="movie-time">1{t}:00pm</span>
+                                    <span key={t} className="movie-time">1{t}:00pm</span>
                                 )}
                             </div>
                         </div>

@@ -19,17 +19,27 @@ export default class MoviePage extends React.Component {
                         </div>
                     </div>
                     <h2>Buy Tickets</h2>
-                    { [1,2,3,4].map((h) => 
-                    <div className="row movie-hall">
+                    { [3,4].map((h) => 
+                    <div className="row movie-hall" key={h}>
                         <div className="col-4">
-                            Hall Name
+                            Hall Name {h}
                         </div>
                         <div className="col-8">
-                            {[1,2,3,4,5].map((t) => 
-                                <span className="movie-time">14:00pm</span>
+                            {[3,4,5].map((t) => 
+                                <span key={t} className="movie-time">1{t}:00pm</span>
                             )}
                         </div>
                     </div>
+                    )}
+                    <h2>Comment/Rating</h2>
+                    {[2,3].map((c) =>
+                        <div class="media" key={c}>
+                            <div class="mr-3">User name</div>
+                            <div class="media-body">
+                                <h5 class="mt-0">Rating 8</h5>
+                                Reviews
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>
