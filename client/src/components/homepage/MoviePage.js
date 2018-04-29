@@ -26,7 +26,7 @@ export default class MoviePage extends React.Component {
                         </div>
                         <div className="col-8">
                             {[3,4,5].map((t) => 
-                                <span key={t} className="movie-time">1{t}:00pm</span>
+                                <Link to="/bookticket/hallId/movieId/time" key={t} className="movie-time">1{t}:00pm</Link>
                             )}
                         </div>
                     </div>
