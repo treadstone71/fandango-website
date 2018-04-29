@@ -180,6 +180,79 @@ adminMethods.get_halls = function(value, done){
 	});
 }
 
+adminMethods.get_movie = function(value, done){
+	console.log("inside req for get movie", value.data);
+	let movietitle = value.data.movie_title;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection('movies');
+		movies.find({ title: movietitle}).toArray(function(err, list){
+			if(err){
+                console.log("fail", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			var movie = {
+				"movie_id": list[0].movie_id,
+				"title": list[0].title,
+				"trailer": list[0].trailer,
+				"characters": list[0].characters,
+				"date": list[0].date,
+				"movie_length": list[0].movie_length,
+				"seeitin": list[0].seeitin
+			}
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", movie }});
+		})
+	});
+}
+
+adminMethods.get_movie_info = function(value, done){
+	console.log("inside req for get movie info ", value.data);
+	let movieid = value.data.movie_id;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection('movies');
+		movies.find({movie_id: +movieid}).toArray(function(err, list){
+			if(err){
+				console.log("fail", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			var movie_info = {
+                "movie_id": list[0].movie_id,
+                "title": list[0].title,
+                "trailer": list[0].trailer,
+                "characters": list[0].characters,
+                "date": list[0].date,
+                "movie_length": list[0].movie_length,
+                "seeitin": list[0].seeitin
+			}
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", movie_info }});
+		})
+	});
+}
+
+adminMethods.update_movie_info = function(value, done) {
+    console.log('inside update movie info', value.data);
+    var data = value.data.body;
+    var movieid = value.data.movie_id;
+    getMongodb(function (mongodb) {
+        var movies = mongodb.collection('movies');
+        set = {
+            title: value.data.body.title,
+            trailer: value.data.body.trailer,
+            movie_length: value.data.body.movie_length,
+            date: value.data.body.date,
+            characters: value.data.body.characters.split(",")
+        }
+        movies.findOneAndUpdate({movie_id: +movieid}, {"$set": set}, function (err, res) {
+            console.log("res in update profile", arguments);
+            if (err) {
+                console.log("error in update movie info", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+            }
+            console.log(res);
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS"}});
+        });
+    });
+}
+
 adminMethods.post_hall = function(value, done){
 	var data = value.data;
 	if(data.username == undefined || data.password == undefined || data.name == undefined || 
@@ -229,7 +302,6 @@ adminMethods.post_hall = function(value, done){
 							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", hall_id: moviehalldoc.hall_id}});
 					})
 				});
-				
 			});
 		});
 	});

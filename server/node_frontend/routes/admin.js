@@ -28,9 +28,27 @@ router.get('/get_halls', function(req, res, next){
 	});
 });
 
+router.get('/get_movie', function(req, res, next){
+	kafka.produce({movie_title : req.query.movie}, 'get_movie', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.get('/movie/get_movie_info', function(req,res, next){
+	kafka.produce({movie_id: req.query.movie_id}, 'get_movie_info', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.post('/movie/update_movie_info', function(req,res,next){
+	kafka.produce({body: req.body, movie_id: req.query.movie_id}, 'update_movie_info', 'admin_topic', 'admin_res', function(value){
+        res.send(JSON.stringify(value));
+    });
+});
+
+
 router.post('/post_hall', function(req, res, next){
 	console.log(req.body);
-
 	kafka.produce(req.body, 'post_hall', 'admin_topic', 'admin_res', function(value){
 		res.send(JSON.stringify(value));
 	});
