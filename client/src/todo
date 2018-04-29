@@ -1,6 +1,8 @@
 user login
+user register
 lgout user/delete user
 edit user profile
+homepage: movie list, movie hall
 search movies by type
 search movie/theatre
 book movie ticket
