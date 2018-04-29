@@ -30,24 +30,24 @@ ReactDOM.render(
     <Provider store={store}>
     <Router history={history}>
     <div>
-    <Route path="/userlogin" component={UserLogin}/>
+    <Route exact path="/userlogin" component={UserLogin}/>
     <Route path="/editprofile" component={EditProfile}/>
 
-    <Route path="/adminlogin" component={AdminLogin}/>
+    <Route exact path="/adminlogin" component={AdminLogin}/>
     <Route exact path="/admin/dashboard" component={AdminDashboard}/>
-    <Route path = "/admin/search-movie-hall" component={SearchMovieHall} />
-    <Route path = "/admin/movie/:movie_id" component={MovieDetails} />
+    <Route exact path = "/admin/search-movie-hall" component={SearchMovieHall} />
+    <Route exact path = "/admin/movie/:movie_id" component={MovieDetails} />
     <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
     <Route exact path="/" component={HomePage} />
-    <Route path = '/admin/moviehall/:hall_id' component={MovieHallDetails} />
+    <Route exact path = '/admin/moviehall/:hall_id' component={MovieHallDetails} />
     <Route exact path="/admin/search-users-bills" component={SearchUsersBills}/>
     <Route exact path="/admin/bill/:billingid" component={ViewBill}/>
-    <Route exact path="admin/user/:userid" component={UserComponent}/>
+    <Route exact path="/admin/user/:userid" component={UserComponent}/>
 
     <Route exact path="/" component={HomePage} />
-    <Route path="/movie/:id" component={MoviePage} />
-    <Route path="/hall/:id" component={MovieHall} />
-    <Route paht="/bookticket/:hallId/:movieId/:time" component={BookTicket} />
+    <Route exact path="/movie/:id" component={MoviePage} />
+    <Route exact path="/hall/:id" component={MovieHall} />
+    <Route exact path="/bookticket/:hallId/:movieId/:time" component={BookTicket} />
 
     </div>
     </Router>

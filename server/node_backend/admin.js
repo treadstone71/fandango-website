@@ -48,6 +48,7 @@ adminMethods.revenue_movies = function(value, done) {
 					return cb();
 
 				movies.find({ movie_id: +sol[i][0] }).toArray(function(err, ele){
+					console.log(ele);
 					if(ele.length != 0){
 						let m = [];
 						m.push(ele[0].title);
@@ -437,10 +438,63 @@ adminMethods.getUserInfo = function(value, done){
 	let query = "select userid,firstname,lastname,username,phone,email from users where username=" + mysql.escape(value.data.username);
 	getConnection(function(err, conn){
 		conn.query(query, function(err, results){
+            conn.release();
 			if(results.length!=0){
 				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", userInfo: results[0]}});
 			}
 		})
+	})
+}
+
+adminMethods.get_user_info = function(value, done){
+    let query = "select userid,firstname,lastname,username,phone,email,address,city,state,zip,creditcard from users where userid=" + mysql.escape(value.data.userid);
+    getConnection(function(err, conn){
+        conn.query(query, function(err, results){
+        	conn.release();
+            if(results.length!=0){
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", user_info: results[0]}});
+            }
+        })
+    })
+}
+
+adminMethods.update_user_info = function(value, done){
+		console.log("inside update user info", value.data.body);
+		var body = value.data.body;
+		let upd = [];
+    if(body.firstname) upd.push("firstname = " + mysql.escape(body.firstname));
+    if(body.lastname) upd.push("lastname = " + mysql.escape(body.lastname));
+    if(body.email) upd.push("email = " + mysql.escape(body.email));
+    if(body.username) upd.push("username = " + mysql.escape(body.username));
+    if(body.phone) upd.push("phone = " + mysql.escape(body.phone));
+    if(body.city) upd.push("city = " + mysql.escape(body.city));
+    if(body.state) upd.push("state = " + mysql.escape(body.state));
+    if(body.zip) upd.push("zip = " + mysql.escape(body.zip));
+    if(body.address) upd.push("address = " + mysql.escape(body.address));
+    if(body.creditcard) upd.push("creditcard = " + mysql.escape(body.creditcard));
+    console.log(JSON.stringify(upd));
+    var updateStr = "";
+    for(var i=0; i<upd.length-1; i++){
+        updateStr = updateStr + upd[i] + ",";
+    }
+    updateStr += upd[upd.length-1];
+
+    getConnection(function(err, conn){
+    	if(err){
+    		console.log("error connecting to database");
+		} else {
+    		console.log("connected to mysql");
+    		var query = "update users set " + updateStr + "where userid = " + mysql.escape(body.userid) + ";";
+    		console.log(query);
+    		conn.query(query, (err, results) => {
+    			conn.release();
+    			if(err){
+    				console.log("error in updating user info");
+				} else{
+                    return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", user_info: results[0]}});
+				}
+			})
+		}
 	})
 }
 

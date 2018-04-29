@@ -14,7 +14,8 @@ export const adminActions = {
     postMovieHall,
     getMovieHall,
     UpdateMovieHallInfo,
-    getUserInfo
+    getUserInfo,
+    UpdateUserInfo
 };
 
 function getTopMovies(){
@@ -246,6 +247,41 @@ function getUserInfo(username){
             }
         }).catch(function(err) {
             dispatch({type: "GETUSER_FAILURE"});
+        })
+    }
+}
+
+function UpdateUserInfo(user_info, userid){
+    console.log("inside update user info",user_info);
+    var data = {
+        userid: user_info.userid,
+        username: user_info.username,
+        firstname: user_info.firstname,
+        lastname: user_info.lastname,
+        address: user_info.address,
+        city: user_info.city,
+        state: user_info.state,
+        zip: user_info.zip,
+        phone: user_info.phone,
+        email: user_info.email,
+        creditcard: user_info.creditcard
+    }
+    return dispatch =>{
+        axios(api + "/admin/user/update_user_info?userid=" +userid,{
+            method: "post",
+            data: data,
+            withCredentials: true
+        }).then(function(res){
+            console.log(res);
+            if(res.data.status == "SUCCESS"){
+                dispatch({type: "UPDATE_USER_INFO_SUCCESS" })
+                alert("User Info Updated");
+                history.push('/admin/search-users-bills');
+            }else {
+                dispatch({type: "UPDATE_USER_INFO_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "UPDATE_USER_INFO_FAILURE"});
         })
     }
 }

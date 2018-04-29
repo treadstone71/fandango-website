@@ -92,6 +92,20 @@ router.get('/getUserInfo', function(req, res, next){
 	});
 });
 
+router.get('/user/get_user_info', function(req, res, next){
+	console.log(req.query);
+	kafka.produce({userid: req.query.userid}, 'get_user_info', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.post('/user/update_user_info', function(req,res,next){
+	console.log(req.query);
+	kafka.produce({body: req.body, userid: req.query.userid}, 'update_user_info', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });
