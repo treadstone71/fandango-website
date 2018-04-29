@@ -21,6 +21,8 @@ class AdminNav extends React.Component{
         return(
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
             <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="/"><img src="https://lh3.googleusercontent.com/gAuQ6y9UBh5E3AlJL8m383NAcoI4Gl9lM3JosyAwNfqEaj1CdoqTC8bSkymghrbY3iEa9g=s170" /></a>
+            &nbsp;
             <a class="navbar-brand" href="/admin/dashboard">Dashboard</a>
             &nbsp;
             <ul class="nav navbar-nav actions ml-auto">

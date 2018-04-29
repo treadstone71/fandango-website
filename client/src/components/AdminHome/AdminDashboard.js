@@ -172,6 +172,8 @@ class Dashboard extends React.Component{
 	          <TabPane tabId="2">
 	            <InputGroup>
 		          <Input onChange={this.onChange} placeholder="Type a Movie Name......"/>
+					&nbsp;
+	      			&nbsp;
 		          <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick}>Search Movie</Button></InputGroupAddon>
 		        </InputGroup>
 		        {citywiseele}

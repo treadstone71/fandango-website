@@ -84,6 +84,7 @@ adminMethods.city_revenue = function(value, done){
 				}
 
 				conn.query(query, function(err, results){
+					conn.release();
 					// console.log(results);
 					if(results.length == 0){
 						return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
@@ -112,6 +113,7 @@ adminMethods.city_revenue = function(value, done){
 					// console.log("query: ", query);
 					getConnection(function(err, conn){
 						conn.query(query, function(err, results){
+							conn.release();
 							// console.log("require: ", results);
 							let ans = {};
 							for(var i in results){
@@ -134,6 +136,7 @@ adminMethods.get_halls = function(value, done){
 	let query = "select * from billing";
 	getConnection(function(err, conn){
 		conn.query(query, function(err, results){
+			conn.release();
 			// console.log("require: ", results);
 			let sol = {};
 			for(var i in results){
@@ -175,6 +178,79 @@ adminMethods.get_halls = function(value, done){
 			});
 		});
 	});
+}
+
+adminMethods.get_movie = function(value, done){
+	console.log("inside req for get movie", value.data);
+	let movietitle = value.data.movie_title;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection('movies');
+		movies.find({ title: movietitle}).toArray(function(err, list){
+			if(err){
+                console.log("fail", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			var movie = {
+				"movie_id": list[0].movie_id,
+				"title": list[0].title,
+				"trailer": list[0].trailer,
+				"characters": list[0].characters,
+				"date": list[0].date,
+				"movie_length": list[0].movie_length,
+				"seeitin": list[0].seeitin
+			}
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", movie }});
+		})
+	});
+}
+
+adminMethods.get_movie_info = function(value, done){
+	console.log("inside req for get movie info ", value.data);
+	let movieid = value.data.movie_id;
+	getMongodb(function(mongodb){
+		var movies = mongodb.collection('movies');
+		movies.find({movie_id: +movieid}).toArray(function(err, list){
+			if(err){
+				console.log("fail", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			}
+			var movie_info = {
+                "movie_id": list[0].movie_id,
+                "title": list[0].title,
+                "trailer": list[0].trailer,
+                "characters": list[0].characters,
+                "date": list[0].date,
+                "movie_length": list[0].movie_length,
+                "seeitin": list[0].seeitin
+			}
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", movie_info }});
+		})
+	});
+}
+
+adminMethods.update_movie_info = function(value, done) {
+    console.log('inside update movie info', value.data);
+    var data = value.data.body;
+    var movieid = value.data.movie_id;
+    getMongodb(function (mongodb) {
+        var movies = mongodb.collection('movies');
+        set = {
+            title: value.data.body.title,
+            trailer: value.data.body.trailer,
+            movie_length: value.data.body.movie_length,
+            date: value.data.body.date,
+            characters: value.data.body.characters.split(",")
+        }
+        movies.findOneAndUpdate({movie_id: +movieid}, {"$set": set}, function (err, res) {
+            console.log("res in update profile", arguments);
+            if (err) {
+                console.log("error in update movie info", err);
+                return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+            }
+            console.log(res);
+            return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS"}});
+        });
+    });
 }
 
 adminMethods.post_hall = function(value, done){
@@ -226,10 +302,58 @@ adminMethods.post_hall = function(value, done){
 							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", hall_id: moviehalldoc.hall_id}});
 					})
 				});
-				
 			});
 		});
 	});
+}
+
+adminMethods.get_bills = function(value, done){
+	let startDate = value.data.startDate;
+	let endDate = value.data.endDate;
+
+	let query = "select * from billing where date between " + mysql.escape(startDate) + " and " + mysql.escape(endDate) + ";";
+	getConnection(function(err, conn){
+		conn.query(query, function(err, results){
+			conn.release();
+			if(err)
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", bills: results}});
+		});
+	})
+}
+
+adminMethods.get_bill_info = function(value, done){
+	let query = "select * from billing where billingid=" + mysql.escape(value.data.billingid);
+	getConnection(function(err, conn){
+		conn.query(query, function(err, results){
+			if(err)
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			let ans = {
+				billingid: results[0].billingid,
+				date: results[0].date,
+				amount: results[0].amount,
+				userid: results[0].userid,
+				movieid: results[0].movieid,
+				hallid: results[0].moviehallid,
+				numtickets: results[0].numtickets
+			}
+			getMongodb(function(mongodb){
+				var movies = mongodb.collection("movies");
+				movies.find({movie_id: +results[0].movieid}).toArray(function(err, ele){
+					ans.moviename = ele[0].title;
+					var moviehall = mongodb.collection("moviehall");
+					moviehall.find({ hall_id: +results[0].moviehallid}).toArray(function(err, ele){
+						ans.hallname = ele[0].name;
+						query = "select username from users where userid=" + mysql.escape(results[0].userid) + ";";
+						conn.query(query, function(err, results){
+							ans.username = results[0].username;
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", bill: ans}});
+						})
+					});
+				});
+			});
+		});
+	})
 }
 
 module.exports = adminMethods;

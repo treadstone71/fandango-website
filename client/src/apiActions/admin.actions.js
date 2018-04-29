@@ -6,6 +6,11 @@ export const adminActions = {
     getTopMovies,
     getCitywiseRevenue,
     getTopHalls,
+    postMovieHall,
+    getBills,
+    getBillInfo,
+    getMovie,
+    UpdateMovieInfo,
     postMovieHall
 };
 
@@ -63,6 +68,53 @@ function getTopHalls(){
     }
 }
 
+function getMovie(movie){
+    return dispatch => {
+        axios(api + ("/admin/get_movie?movie="+movie), {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                console.log("inside get movie res", res.data.movie);
+                dispatch({type:"GET_MOVIE_SUCCESS", movie: res.data.movie})
+            } else {
+                alert("Movie not found");
+                    dispatch({type: "GET_MOVIE_FAILURE"});
+                }
+        }).catch(function(err) {
+            alert("Movie not found");
+            dispatch({type: "GET_MOVIE_FAILURE"})
+    })
+    }
+}
+
+function UpdateMovieInfo(movie_info, movie_id) {
+    console.log("in update movie info", movie_info);
+    var data = {
+        title: movie_info.title,
+        trailer: movie_info.trailer,
+        characters: movie_info.characters,
+        movie_length: movie_info.movie_length,
+        date: movie_info.date
+    }
+    return dispatch =>
+    {
+        axios(api + "/admin/movie/update_movie_info?movie_id=" + movie_id, {
+            method: "post",
+            data: data,
+            withCredentials: true
+        }).then(function (res) {
+            console.log(res.data);
+            dispatch({type: "UPDATE_MOVIE_INFO_SUCCESS"})
+            alert("Movie Info Updated");
+            history.push('/admin/search-movie-hall');
+        }).catch(function (err) {
+            dispatch({type: "UPDATE_MOVIE_INFO_FAILURE"})
+        });
+    }
+}
+
 function postMovieHall(data){
     return dispatch => {
         axios(api + "/admin/post_hall", {
@@ -91,6 +143,42 @@ function postMovieHall(data){
             }
         }).catch(function(err) {
             dispatch({type: "POSTHALL_FAILURE"})
+        })
+    }
+}
+
+function getBills(startDate, endDate){
+    return dispatch => {
+        axios(api + "/admin/get_bills?startDate=" + startDate + "&endDate="+endDate, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETBILLS_SUCCESS", bills: res.data.bills})
+            } else {
+                dispatch({type: "GETBILLS_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETBILLS_FAILURE"});
+        })
+    }
+}
+
+function getBillInfo(billingid){
+    return dispatch => {
+        axios(api + "/admin/get_bill_info?billingid=" + billingid, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETBILL_SUCCESS", bill: res.data.bill})
+            } else {
+                dispatch({type: "GETBILL_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETBILL_FAILURE"});
         })
     }
 }
