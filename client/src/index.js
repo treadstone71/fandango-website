@@ -14,8 +14,6 @@ import AddMovieHall from './components/AdminHome/AddMovieHall';
 import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
 
-import AddMovieHall from './components/AdminHome/AddMovieHall';
-
 import EditProfile from './components/user/EditProfile.js';
 import { Provider } from 'react-redux';
 import { store } from './_helpers/store.js';

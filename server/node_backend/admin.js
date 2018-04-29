@@ -225,28 +225,30 @@ adminMethods.get_movie_info = function(value, done){
 	});
 }
 
-adminMethods.update_movie_info = function(value, done){
-	console.log('inside update movie info', value.data);
-	var data = value.data.body;
-	var movieid = value.data.movie_id;
-	getMongodb(function(mongodb){
-		var movies = mongodb.collection('movies');
-		set = {
-			title:value.data.body.title,
-			trailer: value.data.body.trailer,
-			movie_length: value.data.body.movie_length,
-			date: value.data.body.date,
-			characters: value.data.body.characters.split(",")
-		}
-		movies.findOneAndUpdate({ movie_id: +movieid }, { "$set": set}, function(err, res){
-			console.log("res in update profile",arguments);
-			if(err){
-				console.log("error in update movie info", err);
+adminMethods.update_movie_info = function(value, done) {
+    console.log('inside update movie info', value.data);
+    var data = value.data.body;
+    var movieid = value.data.movie_id;
+    getMongodb(function (mongodb) {
+        var movies = mongodb.collection('movies');
+        set = {
+            title: value.data.body.title,
+            trailer: value.data.body.trailer,
+            movie_length: value.data.body.movie_length,
+            date: value.data.body.date,
+            characters: value.data.body.characters.split(",")
+        }
+        movies.findOneAndUpdate({movie_id: +movieid}, {"$set": set}, function (err, res) {
+            console.log("res in update profile", arguments);
+            if (err) {
+                console.log("error in update movie info", err);
                 return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
-			}
-			console.log(res);
+            }
+            console.log(res);
             return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS"}});
-		})
+        });
+    });
+}
 
 adminMethods.post_hall = function(value, done){
 	var data = value.data;
@@ -297,7 +299,6 @@ adminMethods.post_hall = function(value, done){
 							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", hall_id: moviehalldoc.hall_id}});
 					})
 				});
-				
 			});
 		});
 	});
