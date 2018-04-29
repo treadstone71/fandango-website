@@ -19,6 +19,7 @@ import MovieDetails from './components/AdminHome/MovieDetails';
 
 import EditProfile from './components/user/EditProfile.js';
 import MoviePage from './components/homepage/MoviePage';
+import MovieHall from './components/homepage/MovieHall';
 import { Provider } from 'react-redux';
 import { store } from './_helpers/store.js';
 import { Router, Route, Link, Redirect } from 'react-router-dom';
@@ -41,6 +42,7 @@ ReactDOM.render(
 
     <Route exact path="/" component={HomePage} />
     <Route path="/movie/:id" component={MoviePage} />
+    <Route path="/hall/:id" component={MovieHall} />
 
     </div>
     </Router>
