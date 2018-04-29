@@ -8,6 +8,7 @@ import { history } from './_helpers/history.js';
 import UserLogin from './components/Logins/UserLogin.js';
 import HomePage from './components/homepage/HomePage';
 import AdminLogin from './components/Logins/AdminLogin';
+import MovieHallAdminLogin from './components/Logins/MovieHallAdminLogin';
 import AdminDashboard from './components/AdminHome/AdminDashboard';
 import AddMovieHall from './components/AdminHome/AddMovieHall';
 import SearchUsersBills from './components/AdminHome/SearchUsersBills';
@@ -35,6 +36,7 @@ ReactDOM.render(
     <Route path="/editprofile" component={EditProfile}/>
 
     <Route path="/adminlogin" component={AdminLogin}/>
+        <Route path="/madminlogin" component={MovieHallAdminLogin}/>
     <Route exact path="/admin/dashboard" component={AdminDashboard}/>
     <Route exact path = "/admin/search-movie-hall" component={SearchMovieHall} />
     <Route exact path = "/admin/movie/:movie_id" component={MovieDetails} />
