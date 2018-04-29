@@ -6,7 +6,9 @@ export const adminActions = {
     getTopMovies,
     getCitywiseRevenue,
     getTopHalls,
-    postMovieHall
+    postMovieHall,
+    getBills,
+    getBillInfo
 };
 
 function getTopMovies(){
@@ -91,6 +93,42 @@ function postMovieHall(data){
             }
         }).catch(function(err) {
             dispatch({type: "POSTHALL_FAILURE"})
+        })
+    }
+}
+
+function getBills(startDate, endDate){
+    return dispatch => {
+        axios(api + "/admin/get_bills?startDate=" + startDate + "&endDate="+endDate, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETBILLS_SUCCESS", bills: res.data.bills})
+            } else {
+                dispatch({type: "GETBILLS_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETBILLS_FAILURE"});
+        })
+    }
+}
+
+function getBillInfo(billingid){
+    return dispatch => {
+        axios(api + "/admin/get_bill_info?billingid=" + billingid, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETBILL_SUCCESS", bill: res.data.bill})
+            } else {
+                dispatch({type: "GETBILL_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETBILL_FAILURE"});
         })
     }
 }

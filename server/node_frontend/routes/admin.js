@@ -36,6 +36,20 @@ router.post('/post_hall', function(req, res, next){
 	});
 });
 
+router.get('/get_bills', function(req, res, next){
+	console.log(req.query);
+	kafka.produce({startDate: req.query.startDate, endDate: req.query.endDate}, 'get_bills', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.get('/get_bill_info', function(req, res, next){
+	console.log(req.query);
+	kafka.produce({billingid : req.query.billingid}, 'get_bill_info', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });
