@@ -3,6 +3,16 @@ import AdminNav from '../NavBars/AdminNav.js';
 import { connect } from 'react-redux';
 import { adminActions } from "../../apiActions";
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButtonDropdown,
+  InputGroupDropdown,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+ } from 'reactstrap';
 import classnames from 'classnames';
 import {  Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import DatePicker from 'react-datepicker';
@@ -20,16 +30,30 @@ class UsersBills extends React.Component{
         this.handleChangeStart = this.handleChangeStart.bind(this);
         this.handleChangeEnd = this.handleChangeEnd.bind(this);
         this.onClick = this.onClick.bind(this);
+        this.onClick2 = this.onClick2.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.state = {
             activeTab: '1',
             startDate: moment(),
-            endDate: moment()
+            endDate: moment(),
+            username: ""
         };
+    }
+
+    onChange(e){
+        this.setState({username: e.target.value})
+    }
+
+    onClick2(e){
+        let username = this.state.username;
+        console.log(username)
+        const { dispatch } = this.props;
+        dispatch(adminActions.getUserInfo(username));
     }
 
     onClick(e){
         console.log(this.state.startDate.format("YYYY-MM-DD"));
-        const{ dispatch } = this.props;
+        const { dispatch } = this.props;
         dispatch(adminActions.getBills(this.state.startDate.format("YYYY/MM/DD"), this.state.endDate.format("YYYY/MM/DD")));
     }
 
@@ -59,6 +83,7 @@ class UsersBills extends React.Component{
         const { admin } = this.props;
 
         let billsEle = null;
+        let usersele = null;
         if(admin.bills){
             function getDate(date){
                 date = new Date(date);
@@ -94,6 +119,27 @@ class UsersBills extends React.Component{
                               </table>
                         </div>
         }
+        if(admin.userInfo){
+            usersele = <div class="container">
+                            <div class="row"><div class="col-sm-1"></div>
+                                <div class="col-sm-10">
+                                    <div class="card card-body bg-light">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <img src= { "http://localhost:3000/" + admin.userInfo.userid + ".jpg" } alt="" class="img-rounded img-responsive" />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p><a href={"/admin/user/"+admin.userInfo.userid}><b>{admin.userInfo.firstname + " " + admin.userInfo.lastname}</b></a></p>
+                                                <p><a href={"/admin/user/"+admin.userInfo.userid}><b>{admin.userInfo.username}</b></a></p>
+                                                <p><b>Email : </b>{admin.userInfo.email}</p>
+                                                <p><b>Phone : </b>{admin.userInfo.phone}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><div class="col-sm-1"></div>
+                            </div>
+                        </div>
+        }
 
         return (
             <div class="container">
@@ -126,7 +172,13 @@ class UsersBills extends React.Component{
                     {billsEle}
               </TabPane>
               <TabPane tabId="2">
-                {null}
+              <InputGroup>
+                  <Input onChange={this.onChange} placeholder="Type a username to search......"/>
+                    &nbsp;
+                    &nbsp;
+                  <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick2}>Search Username</Button></InputGroupAddon>
+                </InputGroup><br/><br/>
+                {usersele}
               </TabPane>
             </TabContent>
             </div><div class="col-sm-1"></div></div>

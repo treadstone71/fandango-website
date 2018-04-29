@@ -71,7 +71,7 @@ class Dashboard extends React.Component{
 	  	if(admin.topmovies){
 	  		let dataSource = {
 		        chart: {
-		            caption: "Top 10 movies with Revenue",
+		            caption: "Top movies with Revenue",
 		            numberPrefix:"$",
 		            plottooltext: "Movie : $label Total Revenue : $datavalue",
 		            theme: "ocean"

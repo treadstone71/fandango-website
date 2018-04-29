@@ -50,6 +50,12 @@ export function admin (state = initialState, action){
                 bill: action.bill
             }
             break;
+        case "GETUSER_SUCCESS":
+            return {
+                ...state,
+                userInfo: action.userInfo
+            }
+            break;
         default:
             return state;
     }

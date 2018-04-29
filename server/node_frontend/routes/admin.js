@@ -68,6 +68,13 @@ router.get('/get_bill_info', function(req, res, next){
 	});
 });
 
+router.get('/getUserInfo', function(req, res, next){
+	console.log(req.query);
+	kafka.produce({ username : req.query.username }, 'getUserInfo', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });

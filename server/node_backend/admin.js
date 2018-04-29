@@ -48,10 +48,12 @@ adminMethods.revenue_movies = function(value, done) {
 					return cb();
 
 				movies.find({ movie_id: +sol[i][0] }).toArray(function(err, ele){
-					let m = [];
-					m.push(ele[0].title);
-					m.push(sol[i][1]);
-					ans.push(m);
+					if(ele.length != 0){
+						let m = [];
+						m.push(ele[0].title);
+						m.push(sol[i][1]);
+						ans.push(m);
+					}
 					populate(i+1, sol, movies, cb);
 				});
 
@@ -346,6 +348,7 @@ adminMethods.get_bill_info = function(value, done){
 						ans.hallname = ele[0].name;
 						query = "select username from users where userid=" + mysql.escape(results[0].userid) + ";";
 						conn.query(query, function(err, results){
+							conn.release();
 							ans.username = results[0].username;
 							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", bill: ans}});
 						})
@@ -353,6 +356,17 @@ adminMethods.get_bill_info = function(value, done){
 				});
 			});
 		});
+	})
+}
+
+adminMethods.getUserInfo = function(value, done){
+	let query = "select userid,firstname,lastname,username,phone,email from users where username=" + mysql.escape(value.data.username);
+	getConnection(function(err, conn){
+		conn.query(query, function(err, results){
+			if(results.length!=0){
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", userInfo: results[0]}});
+			}
+		})
 	})
 }
 

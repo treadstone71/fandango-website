@@ -11,7 +11,8 @@ export const adminActions = {
     getBillInfo,
     getMovie,
     UpdateMovieInfo,
-    postMovieHall
+    postMovieHall,
+    getUserInfo
 };
 
 function getTopMovies(){
@@ -179,6 +180,24 @@ function getBillInfo(billingid){
             }
         }).catch(function(err) {
             dispatch({type: "GETBILL_FAILURE"});
+        })
+    }
+}
+
+function getUserInfo(username){
+    return dispatch => {
+        axios(api + "/admin/getUserInfo?username=" + username, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETUSER_SUCCESS", userInfo: res.data.userInfo})
+            } else {
+                dispatch({type: "GETUSER_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETUSER_FAILURE"});
         })
     }
 }

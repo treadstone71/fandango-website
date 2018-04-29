@@ -12,6 +12,7 @@ import AdminDashboard from './components/AdminHome/AdminDashboard';
 import AddMovieHall from './components/AdminHome/AddMovieHall';
 import SearchUsersBills from './components/AdminHome/SearchUsersBills';
 import ViewBill from './components/AdminHome/ViewBill';
+import UserComponent from './components/AdminHome/UserComponent';
 
 import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
@@ -35,6 +36,7 @@ ReactDOM.render(
     <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
     <Route exact path="/admin/search-users-bills" component={SearchUsersBills}/>
     <Route exact path="/admin/bill/:billingid" component={ViewBill}/>
+    <Route exact path="admin/user/:userid" component={UserComponent}/>
 
     <Route exact path="/" component={HomePage} />
 
