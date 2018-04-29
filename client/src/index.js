@@ -18,6 +18,7 @@ import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
 
 import EditProfile from './components/user/EditProfile.js';
+import BookTicket from './components/user/BookTicket.js';
 import MoviePage from './components/homepage/MoviePage';
 import MovieHall from './components/homepage/MovieHall';
 import { Provider } from 'react-redux';
@@ -43,6 +44,7 @@ ReactDOM.render(
     <Route exact path="/" component={HomePage} />
     <Route path="/movie/:id" component={MoviePage} />
     <Route path="/hall/:id" component={MovieHall} />
+    <Route paht="/bookticket/:hallId/:movieId/:time" component={BookTicket} />
 
     </div>
     </Router>
