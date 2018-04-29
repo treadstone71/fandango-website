@@ -48,10 +48,12 @@ adminMethods.revenue_movies = function(value, done) {
 					return cb();
 
 				movies.find({ movie_id: +sol[i][0] }).toArray(function(err, ele){
-					let m = [];
-					m.push(ele[0].title);
-					m.push(sol[i][1]);
-					ans.push(m);
+					if(ele.length != 0){
+						let m = [];
+						m.push(ele[0].title);
+						m.push(sol[i][1]);
+						ans.push(m);
+					}
 					populate(i+1, sol, movies, cb);
 				});
 
@@ -84,6 +86,7 @@ adminMethods.city_revenue = function(value, done){
 				}
 
 				conn.query(query, function(err, results){
+					conn.release();
 					// console.log(results);
 					if(results.length == 0){
 						return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
@@ -112,6 +115,7 @@ adminMethods.city_revenue = function(value, done){
 					// console.log("query: ", query);
 					getConnection(function(err, conn){
 						conn.query(query, function(err, results){
+							conn.release();
 							// console.log("require: ", results);
 							let ans = {};
 							for(var i in results){
@@ -134,6 +138,7 @@ adminMethods.get_halls = function(value, done){
 	let query = "select * from billing";
 	getConnection(function(err, conn){
 		conn.query(query, function(err, results){
+			conn.release();
 			// console.log("require: ", results);
 			let sol = {};
 			for(var i in results){
@@ -351,22 +356,22 @@ adminMethods.get_movie_hall_info = function(value, done){
 	});
 }
 
-adminMethods.update_movie_hall_info = function(value, done){
+adminMethods.update_movie_hall_info = function(value, done) {
     console.log('inside update movie hall info', value.data);
     var data = value.data.body;
     var hallid = value.data.hall_id;
-    getMongodb(function(mongodb){
+    getMongodb(function (mongodb) {
         var moviehall = mongodb.collection('moviehall');
         set = {
-        	username: value.data.body.username,
-			name: value.data.body.name,
-			movie_times: value.data.body.movie_times,
-			num_tickets: value.data.body.num_tickets,
-			screen_number: value.data.body.screen_number,
-			ticket_price: value.data.body.ticket_price,
-			movies: value.data.body.movies
-		}
-		moviehall.findOneAndUpdate({hall_id: +hallid }, {"$set": set}, function(err, res){
+            username: value.data.body.username,
+            name: value.data.body.name,
+            movie_times: value.data.body.movie_times,
+            num_tickets: value.data.body.num_tickets,
+            screen_number: value.data.body.screen_number,
+            ticket_price: value.data.body.ticket_price,
+            movies: value.data.body.movies
+        }
+        moviehall.findOneAndUpdate({hall_id: +hallid}, {"$set": set}, function (err, res) {
             console.log("res in update hall", arguments);
             if (err) {
                 console.log("error in update movie info", err);
@@ -374,8 +379,69 @@ adminMethods.update_movie_hall_info = function(value, done){
             }
             console.log(res);
             return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS"}});
+        });
+    });
+}
+
+adminMethods.get_bills = function(value, done){
+	let startDate = value.data.startDate;
+	let endDate = value.data.endDate;
+
+	let query = "select * from billing where date between " + mysql.escape(startDate) + " and " + mysql.escape(endDate) + ";";
+	getConnection(function(err, conn){
+		conn.query(query, function(err, results){
+			conn.release();
+			if(err)
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", bills: results}});
 		});
-	});
+	})
+}
+
+adminMethods.get_bill_info = function(value, done){
+	let query = "select * from billing where billingid=" + mysql.escape(value.data.billingid);
+	getConnection(function(err, conn){
+		conn.query(query, function(err, results){
+			if(err)
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+			let ans = {
+				billingid: results[0].billingid,
+				date: results[0].date,
+				amount: results[0].amount,
+				userid: results[0].userid,
+				movieid: results[0].movieid,
+				hallid: results[0].moviehallid,
+				numtickets: results[0].numtickets
+			}
+			getMongodb(function(mongodb){
+				var movies = mongodb.collection("movies");
+				movies.find({movie_id: +results[0].movieid}).toArray(function(err, ele){
+					ans.moviename = ele[0].title;
+					var moviehall = mongodb.collection("moviehall");
+					moviehall.find({ hall_id: +results[0].moviehallid}).toArray(function(err, ele){
+						ans.hallname = ele[0].name;
+						query = "select username from users where userid=" + mysql.escape(results[0].userid) + ";";
+						conn.query(query, function(err, results){
+							conn.release();
+							ans.username = results[0].username;
+							return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", bill: ans}});
+						})
+					});
+				});
+			});
+		});
+	})
+}
+
+adminMethods.getUserInfo = function(value, done){
+	let query = "select userid,firstname,lastname,username,phone,email from users where username=" + mysql.escape(value.data.username);
+	getConnection(function(err, conn){
+		conn.query(query, function(err, results){
+			if(results.length!=0){
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", userInfo: results[0]}});
+			}
+		})
+	})
 }
 
 module.exports = adminMethods;

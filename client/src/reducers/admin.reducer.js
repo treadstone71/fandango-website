@@ -49,6 +49,24 @@ export function admin (state = initialState, action){
                 hall_id: action.hall_id
             }
             break;
+        case "GETBILLS_SUCCESS":
+            return {
+                ...state,
+                bills: action.bills
+            }
+            break;
+        case "GETBILL_SUCCESS":
+            return {
+                ...state,
+                bill: action.bill
+            }
+            break;
+        case "GETUSER_SUCCESS":
+            return {
+                ...state,
+                userInfo: action.userInfo
+            }
+            break;
         default:
             return state;
     }

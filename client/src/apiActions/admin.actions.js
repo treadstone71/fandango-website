@@ -6,11 +6,15 @@ export const adminActions = {
     getTopMovies,
     getCitywiseRevenue,
     getTopHalls,
+    postMovieHall,
+    getBills,
+    getBillInfo,
     getMovie,
     UpdateMovieInfo,
     postMovieHall,
     getMovieHall,
-    UpdateMovieHallInfo
+    UpdateMovieHallInfo,
+    getUserInfo
 };
 
 function getTopMovies(){
@@ -175,18 +179,73 @@ function UpdateMovieHallInfo(hall_info, hall_id){
         ticket_price: hall_info.ticket_price,
         movies: hall_info.movies
     }
-    return dispatch =>{
-        axios(api + "/admin/moviehall/update_movie_hall_info?hall_id=" + hall_id,{
+    return dispatch =>
+    {
+        axios(api + "/admin/moviehall/update_movie_hall_info?hall_id=" + hall_id, {
             method: "post",
             data: data,
             withCredentials: true
-        }).then(function(res){
+        }).then(function (res) {
             console.log(res.data);
             dispatch({type: "UPDATE_MOVIE_HALL_INFO_SUCCESS"})
             alert("Movie hall Updated");
             history.push('/admin/search-movie-hall');
-        }).catch(function(err){
+        }).catch(function (err) {
             dispatch({type: "UPDATE_MOVIE_HALL_INFO_FAILURE"})
         });
+    }
+}
+
+function getBills(startDate, endDate){
+    return dispatch => {
+        axios(api + "/admin/get_bills?startDate=" + startDate + "&endDate="+endDate, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETBILLS_SUCCESS", bills: res.data.bills})
+            } else {
+                dispatch({type: "GETBILLS_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETBILLS_FAILURE"});
+        })
+    }
+}
+
+function getBillInfo(billingid){
+    return dispatch => {
+        axios(api + "/admin/get_bill_info?billingid=" + billingid, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETBILL_SUCCESS", bill: res.data.bill})
+            } else {
+                dispatch({type: "GETBILL_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETBILL_FAILURE"});
+        })
+    }
+}
+
+function getUserInfo(username){
+    return dispatch => {
+        axios(api + "/admin/getUserInfo?username=" + username, {
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data);
+            if(res.data && res.data.status == "SUCCESS"){
+                dispatch({type: "GETUSER_SUCCESS", userInfo: res.data.userInfo})
+            } else {
+                dispatch({type: "GETUSER_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETUSER_FAILURE"});
+        })
     }
 }

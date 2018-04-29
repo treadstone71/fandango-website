@@ -10,12 +10,17 @@ import HomePage from './components/homepage/HomePage';
 import AdminLogin from './components/Logins/AdminLogin';
 import AdminDashboard from './components/AdminHome/AdminDashboard';
 import AddMovieHall from './components/AdminHome/AddMovieHall';
+import SearchUsersBills from './components/AdminHome/SearchUsersBills';
+import ViewBill from './components/AdminHome/ViewBill';
+import UserComponent from './components/AdminHome/UserComponent';
 
 import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
 import MovieHallDetails from './components/AdminHome/MovieHallDetails';
 
 import EditProfile from './components/user/EditProfile.js';
+import MoviePage from './components/homepage/MoviePage';
+import MovieHall from './components/homepage/MovieHall';
 import { Provider } from 'react-redux';
 import { store } from './_helpers/store.js';
 import { Router, Route, Link, Redirect } from 'react-router-dom';
@@ -34,6 +39,13 @@ ReactDOM.render(
     <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
     <Route exact path="/" component={HomePage} />
     <Route path = '/admin/moviehall/:hall_id' component={MovieHallDetails} />
+    <Route exact path="/admin/search-users-bills" component={SearchUsersBills}/>
+    <Route exact path="/admin/bill/:billingid" component={ViewBill}/>
+    <Route exact path="admin/user/:userid" component={UserComponent}/>
+
+    <Route exact path="/" component={HomePage} />
+    <Route path="/movie/:id" component={MoviePage} />
+    <Route path="/hall/:id" component={MovieHall} />
 
     </div>
     </Router>
