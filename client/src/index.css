@@ -6,3 +6,14 @@ body {
 .page {
   margin-top: 80px;
 }
+.movie-info {
+  margin-bottom: 20px;
+}
+.movie-hall {
+  margin: 20px 0;
+}
+.movie-time {
+  display: inline-block;
+  margin-right: 20px;
+  border: 1px solid #343a40;
+}
