@@ -28,7 +28,6 @@ router.get('/get_halls', function(req, res, next){
 	});
 });
 
-<<<<<<< HEAD
 router.get('/get_movie', function(req, res, next){
 	kafka.produce({movie_title : req.query.movie}, 'get_movie', 'admin_topic', 'admin_res', function(value){
 		res.send(JSON.stringify(value));
@@ -46,6 +45,7 @@ router.post('/movie/update_movie_info', function(req,res,next){
         res.send(JSON.stringify(value));
     });
 });
+
 
 router.post('/post_hall', function(req, res, next){
 	console.log(req.body);

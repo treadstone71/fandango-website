@@ -9,6 +9,7 @@ import UserLogin from './components/Logins/UserLogin.js';
 import HomePage from './components/homepage/HomePage';
 import AdminLogin from './components/Logins/AdminLogin';
 import AdminDashboard from './components/AdminHome/AdminDashboard';
+import AddMovieHall from './components/AdminHome/AddMovieHall';
 
 import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
