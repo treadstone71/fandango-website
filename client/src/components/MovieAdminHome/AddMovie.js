@@ -1,5 +1,6 @@
 import React from 'react';
 import MovieNav from '../NavBars/MovieNav.js';
+import { connect } from 'react-redux';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { madminActions } from "../../apiActions";
 
@@ -72,7 +73,7 @@ class AddMovie extends React.Component {
         <Label for="seeitin">See It In</Label>
         <Input name="seeitin" id="seeitin" placeholder="Enter where you can watch the movie seperated by comma(,)..." onChange={this.onChange}/>
         </FormGroup>
-        <Button type="submit" color="primary" onClick={this.onClick}>Add Movie Hall</Button>
+        <Button type="submit" color="primary" onClick={this.onClick}>Add Movie </Button>
         </Form>
         </div><div class="col-sm-2"></div></div>
         </div>
@@ -88,4 +89,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default AddMovie;
+export default connect(mapStateToProps)(AddMovie);

@@ -126,7 +126,7 @@ class User extends React.Component{
             <div class="row">
             <div class="col-md-3">
             <div class="text-center">
-            <img src="" class="img-rounded img-responsive" alt="" />
+            <img src={"http://localhost:3000/movieimages/download.jpeg"} class="img-rounded img-responsive" alt="" />
             <h5></h5>
             </div>
             </div>

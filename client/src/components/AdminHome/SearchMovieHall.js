@@ -73,9 +73,10 @@ class SearchMovieHall extends React.Component{
                 <div class='row'>
                 <div class="col-sm-3">
                 </div>
-                <div class="col-sm-6">
-                <div class="">
                 <div class="row">
+                <div class="col-sm-6">
+                <img src={"http://localhost:3000/movieimages/1003.jpeg"} alt="" class="img-rounded img-responsive" />
+                </div>
                 <div class="col-sm-6">
                 <a href={"/admin/movie/" + details.movie_id}><h4>{details.title}</h4></a>
                <p>
@@ -106,8 +107,7 @@ class SearchMovieHall extends React.Component{
             <div class="col-sm-3">
                 </div>
             </div>
-            </div>
-            </div>
+
         }
         if(admin.name){
             let details = admin.name;
@@ -121,7 +121,7 @@ class SearchMovieHall extends React.Component{
                 <div class="">
                 <div class="row">
                 <div class="col-sm-6">
-                <img src= "" alt="" class="img-rounded img-responsive" />
+                <img src={"http://localhost:3000/movieimages/1002.jpeg"} alt="" class="img-rounded img-responsive" />
                 </div>
                 <div class="col-sm-6">
                 <a href={"/admin/moviehall/" + details.hall_id}><h4>{details.hall_id}</h4></a>
