@@ -40,4 +40,5 @@ router.post('/hallimage', upload.single('file'), function(req, res, next){
 	console.log("profile hall upload success");
 	res.send({status: "SUCCESS"});
 });
+
 module.exports = router;
