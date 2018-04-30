@@ -31,8 +31,8 @@ class MovieNav extends React.Component{
             Movie Admin
             </a>
             <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/admin/add-movie-hall">Add Movie </a></li>
-        <li><a class="dropdown-item" href="/admin/search-movie-hall">Search Movie/Hall</a></li>
+            <li><a class="dropdown-item" href="/madmin/add-movie">Add Movie </a></li>
+        <li><a class="dropdown-item" href="/madmin/search-movie">Search Movie</a></li>
         </ul>
         </li>
         </ul>

@@ -14,4 +14,11 @@ router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });
 
+router.post('/post_movie', function(req, res, next){
+	console.log(req.body);
+    kafka.produce(req.body, 'post_movie', 'madmin_topic', 'madmin_res', function(value){
+        res.send(JSON.stringify(value));
+    });
+});
+
 module.exports = router;

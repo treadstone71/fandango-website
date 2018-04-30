@@ -19,6 +19,7 @@ import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
 import MovieHallDetails from './components/AdminHome/MovieHallDetails';
 import MovieAdminDashboard from './components/MovieAdminHome/MovieAdminDashboard';
+import AddMovie from './components/MovieAdminHome/AddMovie';
 
 import EditProfile from './components/user/EditProfile.js';
 import BookTicket from './components/user/BookTicket.js';
@@ -35,9 +36,9 @@ ReactDOM.render(
     <div>
     <Route exact path="/userlogin" component={UserLogin}/>
     <Route exact path="/editprofile" component={EditProfile}/>
-
+    <Route exact path="/madmin/add-movie" component={AddMovie} />
     <Route exact path="/adminlogin" component={AdminLogin}/>
-        <Route exact path="/madminlogin" component={MovieHallAdminLogin}/>
+    <Route exact path="/madminlogin" component={MovieHallAdminLogin}/>
     <Route exact eaxct path="/admin/dashboard" component={AdminDashboard}/>
     <Route exact path='/madmin/dashboard' component={MovieAdminDashboard} />
     <Route exact path = "/admin/search-movie-hall" component={SearchMovieHall} />
