@@ -18,6 +18,8 @@ import UserComponent from './components/AdminHome/UserComponent';
 import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
 import MovieHallDetails from './components/AdminHome/MovieHallDetails';
+import MovieAdminDashboard from './components/MovieAdminHome/MovieAdminDashboard';
+import AddMovie from './components/MovieAdminHome/AddMovie';
 
 import EditProfile from './components/user/EditProfile.js';
 import BookTicket from './components/user/BookTicket.js';
@@ -33,12 +35,12 @@ ReactDOM.render(
     <Router history={history}>
     <div>
     <Route exact path="/userlogin" component={UserLogin}/>
-    <Route path="/editprofile" component={EditProfile}/>
-
+    <Route exact path="/editprofile" component={EditProfile}/>
+    <Route exact path="/madmin/add-movie" component={AddMovie} />
     <Route exact path="/adminlogin" component={AdminLogin}/>
-    <Route path="/adminlogin" component={AdminLogin}/>
-        <Route path="/madminlogin" component={MovieHallAdminLogin}/>
-    <Route exact path="/admin/dashboard" component={AdminDashboard}/>
+    <Route exact path="/madminlogin" component={MovieHallAdminLogin}/>
+    <Route exact eaxct path="/admin/dashboard" component={AdminDashboard}/>
+    <Route exact path='/madmin/dashboard' component={MovieAdminDashboard} />
     <Route exact path = "/admin/search-movie-hall" component={SearchMovieHall} />
     <Route exact path = "/admin/movie/:movie_id" component={MovieDetails} />
     <Route exact path="/admin/add-movie-hall" component={AddMovieHall}/>
@@ -53,9 +55,6 @@ ReactDOM.render(
     <Route exact path="/hall/:id" component={MovieHall} />
     <Route exact path="/bookticket/:hallId/:movieId/:time" component={BookTicket} />
 
-    <Route path="/movie/:id" component={MoviePage} />
-    <Route path="/hall/:id" component={MovieHall} />
-    <Route path="/bookticket/:hallId/:movieId/:time" component={BookTicket} />
     <Route exact path="/search" component={MovieHallSearch}/>
 
     </div>

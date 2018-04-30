@@ -323,3 +323,4 @@ function getReviews(moviename){
         })
     }
 }
+
