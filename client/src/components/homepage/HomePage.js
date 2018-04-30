@@ -81,6 +81,7 @@ class HomePage extends React.Component {
             </div>
           ))}
         </div>
+        <br />
         <h2>Near By Movie Halls</h2>
         <div className="row">
           {this.state.moviehalls.map(moviehall => (
