@@ -32,9 +32,12 @@ class Dashboard extends React.Component{
 	    this.toggle = this.toggle.bind(this);
 	    this.onClick = this.onClick.bind(this);
 	    this.onChange = this.onChange.bind(this);
+	    this.onClick2 = this.onClick2.bind(this);
+	    this.onChange2 = this.onChange2.bind(this);
 	    this.state = {
 	        activeTab: '1',
-	        moviename: ''
+	        moviename: '',
+	        moviename2: ''
 	    };
 	}
 
@@ -46,8 +49,17 @@ class Dashboard extends React.Component{
 	    }
 	}
 
+	onChange2(e){
+		this.setState({moviename2: e.target.value})
+	}
+
 	onChange(e){
 		this.setState({moviename: e.target.value})
+	}
+
+	onClick2(e){
+		const { dispatch } = this.props;
+		dispatch(adminActions.getReviews(this.state.moviename2));
 	}
 
 	onClick(e){
@@ -60,6 +72,7 @@ class Dashboard extends React.Component{
 		const { dispatch } = this.props;
 		dispatch(adminActions.getTopMovies());
 		dispatch(adminActions.getTopHalls());
+		dispatch(adminActions.getClicks());
 	}
 
   	render() {
@@ -68,6 +81,8 @@ class Dashboard extends React.Component{
 	  	let topmoviesele = null;
 	  	let citywiseele = null;
 	  	let tophallsele = null;
+	  	let pageClicksele = null;
+	  	let reviewsele = null
 	  	if(admin.topmovies){
 	  		let dataSource = {
 		        chart: {
@@ -141,6 +156,60 @@ class Dashboard extends React.Component{
 
 	  		tophallsele = < ReactFC {...chartConfigs} />
 	  	}
+	  	if(admin.clicks){
+	  		let data = [];
+	  		for(let key in admin.clicks)
+	  			data.push({label: key, value: admin.clicks[key]});
+
+	  		let dataSource = {
+		        chart: {
+		            caption: "Clicks per user page",
+		            showpercentvalues:"1",
+		            showpercentintooltip:"0",
+		            plottooltext: "Page : $label Total Clicks : $datavalue",
+		            theme: "ocean"
+		        },
+		        data
+		    };
+		    let chartConfigs = {
+		        id: "clicks-chart",
+		        renderAt: "clicks-chart-container",
+		        type: "pie3d",
+		        width: "80%",
+		        height: 400,
+		        dataFormat: "json",
+		        dataSource: dataSource
+		    };
+
+	  		pageClicksele = < ReactFC {...chartConfigs} />
+	  	}
+	  	if(admin.reviews){
+	  		let data = [];
+	  		for(let key in admin.reviews)
+	  			data.push({label: key, value: admin.reviews[key]});
+
+	  		let dataSource = {
+		        chart: {
+		            caption: "Reviews",
+		            showpercentvalues:"1",
+		            showpercentintooltip:"0",
+		            plottooltext: "Rating : $label No. of users : $datavalue",
+		            theme: "ocean"
+		        },
+		        data
+		    };
+		    let chartConfigs = {
+		        id: "reviews-chart",
+		        renderAt: "reviews-chart-container",
+		        type: "column2d",
+		        width: "80%",
+		        height: 400,
+		        dataFormat: "json",
+		        dataSource: dataSource
+		    };
+
+	  		reviewsele = < ReactFC {...chartConfigs} />
+	  	}
 
 	    return (
 	      <div>
@@ -164,6 +233,16 @@ class Dashboard extends React.Component{
 	              Top Halls
 	            </NavLink>
 	          </NavItem>
+	          <NavItem>
+	            <NavLink className={classnames({ active: this.state.activeTab === '4' })} onClick={() => { this.toggle('4'); }}>
+	              Page Clicks
+	            </NavLink>
+	          </NavItem>
+	          <NavItem>
+	            <NavLink className={classnames({ active: this.state.activeTab === '5' })} onClick={() => { this.toggle('5'); }}>
+	              Reviews
+	            </NavLink>
+	          </NavItem>
 	        </Nav>
 	        <TabContent activeTab={this.state.activeTab}>
 	          <TabPane tabId="1">
@@ -180,6 +259,18 @@ class Dashboard extends React.Component{
 	          </TabPane>
 	          <TabPane tabId="3">
 	            {tophallsele}
+	          </TabPane>
+	          <TabPane tabId="4">
+	            {pageClicksele}
+	          </TabPane>
+	          <TabPane tabId="5"><br/>
+	          	<InputGroup>
+		          <Input onChange={this.onChange2} placeholder="Type a Movie Name......"/>
+					&nbsp;
+	      			&nbsp;
+		          <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick2}>Search Movie</Button></InputGroupAddon>
+		        </InputGroup>
+	            {reviewsele}
 	          </TabPane>
 	        </TabContent>
 	        </div><div class="col-sm-1"></div></div></div>

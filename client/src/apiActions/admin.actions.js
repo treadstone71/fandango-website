@@ -15,7 +15,9 @@ export const adminActions = {
     getMovieHall,
     UpdateMovieHallInfo,
     getUserInfo,
-    UpdateUserInfo
+    UpdateUserInfo,
+    getClicks,
+    getReviews
 };
 
 function getTopMovies(){
@@ -282,6 +284,42 @@ function UpdateUserInfo(user_info, userid){
             }
         }).catch(function(err) {
             dispatch({type: "UPDATE_USER_INFO_FAILURE"});
+        })
+    }
+}
+
+function getClicks(){
+    return dispatch =>{
+        axios(api + "/admin/clicksperpage",{
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res);
+            if(res.data.status == "SUCCESS"){
+                dispatch({type: "GETCLICKS_SUCCESS", clicks: res.data.ans});
+            }else {
+                dispatch({type: "GETCLICKS_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETCLICKS_FAILURE"});
+        })
+    }
+}
+
+function getReviews(moviename){
+    return dispatch =>{
+        axios(api + "/admin/review_graph?moviename=" + moviename,{
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res);
+            if(res.data.status == "SUCCESS"){
+                dispatch({type: "GETREVIEWS_SUCCESS", reviews: res.data.ans});
+            }else {
+                dispatch({type: "GETREVIEWS_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETREVIEWS_FAILURE"});
         })
     }
 }

@@ -498,4 +498,35 @@ adminMethods.update_user_info = function(value, done){
 	})
 }
 
+adminMethods.clicksperpage = function(value, done){
+	getMongodb(function(mongodb){
+		let clicks = mongodb.collection("logging");
+		clicks.find({}, {"clicksperpage": 1}).toArray(function(err, ele){
+			let ans = ele[0].clicksperpage;
+			return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", ans}});
+		});
+	});
+}
+
+adminMethods.review_graph = function(value, done){
+	var moviename = value.data.moviename;
+	getMongodb(function(mongodb){
+		let movies = mongodb.collection("movies");
+		movies.find({title: moviename}).toArray(function(err, ele){
+			if(ele.length != 0){
+				let reviews = ele[0].reviews;
+				let ans = {};
+				for(var i in reviews){
+					if(!ans.hasOwnProperty(reviews[i].rating))
+						ans[reviews[i].rating] = 0;
+
+					ans[reviews[i].rating] += 1;
+				}
+				return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "SUCCESS", ans}});
+			}
+			return done({correlationId: value.correlationId, replyTo: value.replyTo, data: {status: "FAILURE"}});
+		})
+	});
+}
+
 module.exports = adminMethods;
