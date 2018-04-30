@@ -1,5 +1,5 @@
 import React from 'react';
-import MainNav from '../../mainNav.js';
+import UserNav from '../NavBars/UserNav.js';
 
 import { Link } from 'react-router-dom';
 
@@ -64,7 +64,7 @@ class HomePage extends React.Component {
   render() {
     return (
       <div class="container">
-        <MainNav />
+        <UserNav />
         <div className="row page">
           {this.state.movies.map(movie => (
             <div class="col" key={movie.title}>
