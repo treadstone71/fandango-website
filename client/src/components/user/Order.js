@@ -26,7 +26,7 @@ class Order extends Component {
         <img
           style={image}
           src={
-            'https://upload.wikimedia.org/wikipedia/en/thumb/1/17/Bugs_Bunny.svg/200px-Bugs_Bunny.svg.png'
+            'https://netbranding.co.nz/wp-content/uploads/2014/04/avatar-2.png'
           }
         />
         <p>name: Bugs Bunny</p>
