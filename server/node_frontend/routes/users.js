@@ -15,35 +15,22 @@ router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });
 
-//wait til sign-up page to finish
-router.post('/register', function(req, res, next){
-	kafka.produce({username: 'qili@hotmail.com', password:'1234'}, 'register_user', 'user_topic', 'user_res', function(value){
+router.get("/get_movie_category", function(req, res, next){
+	kafka.produce({ category : req.query.category}, 'get_movie_category', 'user_topic', 'user_res', function(value){
 		res.send(JSON.stringify(value));
 	});
 });
 
-router.post('/login',
-  function(req, res) {
-  	var _username = req.body.username;
-  	var _password = req.body.password;
-
-  	//Validation
-  	req.checkBody('username', 'Username is required').notEmpty();
-	req.checkBody('password', 'Password is required').notEmpty();
-
-	kafka.produce({username: _username, password: _password}, 'login', 'login_topic', 'login_res', function(value){
+router.get("/get_movie", function(req, res, next){
+	kafka.produce({ moviename : req.query.movie}, 'get_movie', 'user_topic', 'user_res', function(value){
 		res.send(JSON.stringify(value));
-		if (res.status === "SUCCESS") {
-			passport.authenticate('local')(req, res, () => {
-            req.session.save((err) => {
-                if (err) {
-                    return res.status(404).send('login error');
-                }
-                res.redirect('/');
-            });
-        });
-		}
 	});
-  });
+});
+
+router.get("/get_movie_hall", function(req, res, next){
+	kafka.produce({ hallname : req.query.hallname}, 'get_movie_hall', 'user_topic', 'user_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
 
 module.exports = router;

@@ -29,7 +29,7 @@ class SearchMovieHall extends React.Component{
         this.state = {
             activeTab: '1',
             moviename: '',
-            maoviehallname: ''
+            moviehallname: ''
         };
     }
 
