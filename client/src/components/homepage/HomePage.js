@@ -36,6 +36,28 @@ class HomePage extends React.Component {
           desc:
             'A better reality awaits. When the creator of a popular video game system dies, a virtual contest is created to compete for his fortune.'
         }
+      ],
+      moviehalls: [
+        {
+          name: 'California Theatre',
+          desc:
+            'Restored 1927 motion picture house turned performing-arts venue, also offers private event options.'
+        },
+        {
+          name: 'Towne 3 Cinemas',
+          desc:
+            'Movies from India featured in a straightforward movie theater with a concession stand.'
+        },
+        {
+          name: 'AMC Mercado 20',
+          desc:
+            'Find movies near you, view show times, watch movie trailers and buy movie tickets. Our theaters have the newest movies. Watch trailers and then find tickets for movies near you.'
+        },
+        {
+          name: 'Hackworth IMAX Dome',
+          desc:
+            'Movie theater chain known for presenting 3D films on a giant screen, including blockbusters.'
+        }
       ]
     };
   }
@@ -61,12 +83,12 @@ class HomePage extends React.Component {
         </div>
         <h2>Near By Movie Halls</h2>
         <div className="row">
-          {[1, 2, 3, 4].map(i => (
-            <div className="col" key={i}>
+          {this.state.moviehalls.map(moviehall => (
+            <div className="col" key={moviehall.name}>
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Hall Name {i}</h5>
-                  <p class="card-text">Hall Description</p>
+                  <h5 class="card-title">{moviehall.name}</h5>
+                  <p class="card-text">{moviehall.desc}</p>
                   <Link to="/hall/23333" class="btn btn-primary">
                     Check out Movies
                   </Link>
