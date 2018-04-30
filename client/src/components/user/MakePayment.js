@@ -32,6 +32,9 @@ class MakePayment extends Component {
           <InputFieldLabel content={'Name as it appears on the card'} />
           <InputField />
         </div>
+        <button type="submit" className="btn btn-primary">
+          Pay
+        </button>
       </div>
     );
   }
