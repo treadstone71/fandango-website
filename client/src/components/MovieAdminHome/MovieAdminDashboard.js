@@ -1,4 +1,5 @@
 import React from 'react';
+
 import MovieNav from "../NavBars/MovieNav";
 import { connect } from 'react-redux';
 import { madminActions } from "../../apiActions/madmin.actions.js";
@@ -20,6 +21,7 @@ class MovieAdminDashboard extends React.Component{
 
     constructor(props){
         super(props);
+
         this.state = {
             activeTab: '1',
             moviename: ''
@@ -59,6 +61,9 @@ class MovieAdminDashboard extends React.Component{
         const { dispatch } = this.props;
         dispatch(madminActions.getMovieBilling(this.state.moviename));
     }
+
+
+
 
     render(){
         const { admin } = this.props;
@@ -143,9 +148,11 @@ class MovieAdminDashboard extends React.Component{
             </div>
             </div>
             </div>
-            </div>
-        );
+
+    );
+
     }
+
 }
 
 function mapStateToProps(state) {

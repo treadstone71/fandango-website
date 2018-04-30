@@ -67,6 +67,7 @@ export function admin (state = initialState, action){
                 userInfo: action.userInfo
             }
             break;
+
             case "POSTMOVIE_SUCCESS":
                 return {
                     ...state,
@@ -79,6 +80,19 @@ export function admin (state = initialState, action){
                         movie: action.movie
                     }
                     break;
+
+        case "GETCLICKS_SUCCESS": 
+            return {
+                ...state,
+                clicks: action.clicks
+            }
+            break;
+        case "GETREVIEWS_SUCCESS":
+            return {
+                ...state,
+                reviews: action.reviews
+            }
+            break;
         default:
             return state;
     }

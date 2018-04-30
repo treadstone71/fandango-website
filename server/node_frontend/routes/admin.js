@@ -106,6 +106,18 @@ router.post('/user/update_user_info', function(req,res,next){
 	});
 });
 
+router.get("/clicksperpage", function(req, res, next){
+	kafka.produce({}, 'clicksperpage', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.get("/review_graph", function(req, res, next){
+	kafka.produce({ moviename: req.query.moviename }, 'review_graph', 'admin_topic', 'admin_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 router.get('/user', auth, function(req, res, next){
 	return res.send(JSON.stringify(req.user));
 });

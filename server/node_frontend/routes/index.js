@@ -50,6 +50,7 @@ router.post('/hallimage', upload.single('file'), function(req, res, next){
 	res.send({status: "SUCCESS"});
 });
 
+
 router.post('/movieimages', upload1.single('file'), function(req, res, next){
 	console.log("movie image upload");
 	res.send({status: "SUCCESS"});

@@ -2,7 +2,9 @@ import React from 'react';
 import MainNav from '../../mainNav.js';
 import { connect } from 'react-redux';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
-import classnames from 'classnames';import {
+import { userActions } from "../../apiActions";
+import classnames from 'classnames';
+import {
   InputGroup,
   InputGroupAddon,
   InputGroupButtonDropdown,
@@ -20,8 +22,11 @@ class Search extends React.Component{
 
         this.toggle = this.toggle.bind(this);
         this.onClick2 = this.onClick2.bind(this);
+        this.onClick3 = this.onClick3.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onChange2 = this.onChange2.bind(this);
+        this.onClick = this.onClick.bind(this);
+        this.onChange3 = this.onChange3.bind(this);
         this.state = {
             activeTab: '1',
             moviename: "",
@@ -32,7 +37,7 @@ class Search extends React.Component{
     }
 
     onChange3(e){
-        this.setState({ hallname: ""})
+        this.setState({ hallname: e.target.value})
     }
 
     onChange2(e){
@@ -42,9 +47,28 @@ class Search extends React.Component{
     onChange(e){
         this.setState({moviename: e.target.value})
     }
+    //for category
+    onClick3(e){
+        console.log(this.state, e.target.name);
+        const { category } = this.state;
+        const { dispatch } = this.props;
+        dispatch(userActions.getCategory(category));
+    }
 
+    //for movies
+    onClick(e){
+        console.log(this.state, e.target.name);
+        const { moviename } = this.state;
+        const { dispatch } = this.props;
+        dispatch(userActions.getMovieUser(moviename));
+    }
+
+    //for halls
     onClick2(e){
-
+        console.log(this.state.hallname);
+        const { hallname } = this.state;
+        const { dispatch } = this.props;
+        dispatch(userActions.getHallUser(hallname));
     }
 
     toggle(tab) {
@@ -56,6 +80,51 @@ class Search extends React.Component{
     }
 
     render() {
+
+        const { user } = this.props;
+        let moviesele = null;
+        let hallele = null
+
+        if(user.movie){
+            moviesele = user.movie.map(movie => <div class="row"><div class="col-1"></div>
+                                        <div class="col-10">
+                                            <div class="card card-body bg-light">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <img src= {"http://localhost:3000/movieimages/" + movie.movie_id + ".jpg"} alt="" class="img-rounded img-responsive" width="300" height="300" />
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p><a href={"/movie/"+movie.movie_id}><b>{movie.title}</b></a></p>
+                                                        <p><b>Characters : </b> {movie.characters.toString()} </p>
+                                                        <p><b>Movie Time : </b>{movie.movie_length}</p>
+                                                        <p><a href={movie.trailer}>Click to see trailer</a></p>
+                                                        <p><b>Available in : </b>{movie.seeitin.toString()}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="col-1"></div>
+                                    </div>)
+        }
+        if(user.hall){
+            hallele = <div class="row"><div class="col-1"></div>
+                    <div class="col-10">
+                        <div class="card card-body bg-light">
+                            <div class="row">
+                                <div class="col-6">
+                                    <img src= {"http://localhost:3000/hallimages/" + user.hall.hall_id + ".jpg"} alt="" class="img-rounded img-responsive" width="300" height="300" />
+                                </div>
+                                <div class="col-6">
+                                    <p><a href={"/"+user.hall.hall_id}><b>{user.hall.name}</b></a></p>
+                                    <p><b>Movie Timings : </b>{user.hall.movie_times.toString()}</p>
+                                    <p><b>Number of Tickets left : </b> {user.hall.num_tickets} </p>
+                                    <p><b>Ticket Price : </b> {user.hall.ticket_price} </p>
+                                    <p><b>Number of Screens : </b>{user.hall.screen_number.length}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div><div class="col-1"></div>
+                </div>
+        }
         return (
             <div class="container">
             <MainNav /><br/><br/><br/><br/>
@@ -78,32 +147,15 @@ class Search extends React.Component{
                   <Input onChange={this.onChange} placeholder="Type a Movie Name to search......"/>
                     &nbsp;
                     &nbsp;
-                  <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick2}>Search Movie</Button></InputGroupAddon>
+                  <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick}>Search Movie</Button></InputGroupAddon>
                 </InputGroup><br/>
                 <InputGroup>
                   <Input onChange={this.onChange2} placeholder="Type a Movie Category to search......"/>
                     &nbsp;
                     &nbsp;
-                  <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick2}>Search </Button></InputGroupAddon>
+                  <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick3}>Search Category</Button></InputGroupAddon>
                 </InputGroup><br/><br/>
-                <div class="row"><div class="col-1"></div>
-                    <div class="col-10">
-                        <div class="card card-body bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <img src= "http://localhost:3000/movieimages/1000.jpg" alt="" class="img-rounded img-responsive" width="300" height="300" />
-                                </div>
-                                <div class="col-6">
-                                    <p><a href="/"><b>Avengers - Infinity War</b></a></p>
-                                    <p><b>Halls : </b><a href="/">Sierra</a>,<a href="/">Great Mall</a></p>
-                                    <p><b>Characters : </b> Robert Downey Jr, Chris Pratt ... </p>
-                                    <p><b>Movie Time : </b>120 minutes</p>
-                                    <p><b>Movie Rating : </b>3.5</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><div class="col-1"></div>
-                </div>
+                {moviesele}
               </TabPane>
               <TabPane tabId="2">
                 <InputGroup>
@@ -112,23 +164,7 @@ class Search extends React.Component{
                     &nbsp;
                   <InputGroupAddon addonType="prepend"><Button color="primary" onClick={this.onClick2}>Search Movie</Button></InputGroupAddon>
                 </InputGroup><br/>
-                <div class="row"><div class="col-1"></div>
-                    <div class="col-10">
-                        <div class="card card-body bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <img src= "http://localhost:3000/hallimages/1018.jpg" alt="" class="img-rounded img-responsive" width="300" height="300" />
-                                </div>
-                                <div class="col-6">
-                                    <p><a href="/"><b>Great Mall Century</b></a></p>
-                                    <p><b>Movies : </b><a href="/">The Bourne Identity</a>,<a href="/">The icarus Agenda</a></p>
-                                    <p><b>Price : </b> 15$ </p>
-                                    <p><b>Movie Time : </b>120 minutes</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><div class="col-1"></div>
-                </div>
+                {hallele}
               </TabPane>
             </TabContent>
             </div><div class="col-sm-1"></div></div>

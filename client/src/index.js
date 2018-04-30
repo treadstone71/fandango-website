@@ -23,8 +23,11 @@ import MovieAdminDashboard from './components/MovieAdminHome/MovieAdminDashboard
 import AddMovie from './components/MovieAdminHome/AddMovie';
 import MovieSearchDetails from './components/MovieAdminHome/MovieSearchDetails';
 
+import MakePayment from './components/user/MakePayment';
+import OrderHistory from './components/user/OrderHistory';
 import EditProfile from './components/user/EditProfile.js';
 import BookTicket from './components/user/BookTicket.js';
+import UserSignup from './components/user/UserSignUp.js';
 import MoviePage from './components/homepage/MoviePage';
 import MovieHall from './components/homepage/MovieHall';
 import MovieHallSearch from './components/user/MovieHallSearch';
@@ -33,7 +36,7 @@ import { store } from './_helpers/store.js';
 import { Router, Route, Link, Redirect } from 'react-router-dom';
 
 ReactDOM.render(
-    <Provider store={store}>
+  <Provider store={store}>
     <Router history={history}>
     <div>
     <Route exact path="/userlogin" component={UserLogin}/>
@@ -57,11 +60,9 @@ ReactDOM.render(
     <Route exact path="/movie/:id" component={MoviePage} />
     <Route exact path="/hall/:id" component={MovieHall} />
     <Route exact path="/bookticket/:hallId/:movieId/:time" component={BookTicket} />
-
-    <Route exact path="/search" component={MovieHallSearch}/>
-
-    </div>
+      </div>
     </Router>
-    </Provider>
-    , document.getElementById('root'));
+  </Provider>,
+  document.getElementById('root')
+);
 registerServiceWorker();
