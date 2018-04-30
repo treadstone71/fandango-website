@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class Order extends Component {
   render() {
@@ -22,8 +22,13 @@ class Order extends Component {
     };
     return (
       <div style={order}>
-        <h4 style={h4}>delivered mon, apr 30</h4>
-        <img style={image} src={'https://upload.wikimedia.org/wikipedia/en/thumb/1/17/Bugs_Bunny.svg/200px-Bugs_Bunny.svg.png'} />
+        <h4 style={h4}>Seen on Apr 30</h4>
+        <img
+          style={image}
+          src={
+            'https://upload.wikimedia.org/wikipedia/en/thumb/1/17/Bugs_Bunny.svg/200px-Bugs_Bunny.svg.png'
+          }
+        />
         <p>name: Bugs Bunny</p>
         <p>showed on: 05/23/2014</p>
         <p>number of tickets: 2</p>
