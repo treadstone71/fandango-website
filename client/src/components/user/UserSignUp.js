@@ -2,6 +2,7 @@ import React from 'react';
 import MainNav from '../../mainNav.js';
 import '../../css/userlogin.css';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 const api = 'http://localhost:3000';
 
 export default class UserSignup extends React.Component {
@@ -10,7 +11,8 @@ export default class UserSignup extends React.Component {
         this.state = {
             username: '',
             password: '',
-            err_message: null
+            err_message: null,
+            isSignUp: false
         };
     }
     handleSubmit(e) {
@@ -26,15 +28,21 @@ export default class UserSignup extends React.Component {
         axios.post(api+'/users/register', this.state).then(res => {
             console.log(res);
             console.log(res.data);
+            if (res.status == 'SUCCESS' || res.state == 201) {
+                this.setState({isSignUp: true});
+            }
         })
+        // this.setState({isSignUp: true});
+        // return <Redirect to='/userlogin'/>;
+        // browserHistory.push("/userlogin");
     }
 
     handleUNChange(e){
-        this.setState({username: e.target.value});
+        this.setState({username: e.target.value, err_message:null});
     }
 
     handlePWChange(e){
-        this.setState({password: e.target.value});
+        this.setState({password: e.target.value, err_message:null});
     }
 
     render() {
@@ -43,6 +51,10 @@ export default class UserSignup extends React.Component {
                 {this.state.err_message}
             </div>
             );
+        const signup = this.state.isSignUp? (
+            <Redirect to='/userlogin'/>
+            ) : null;
+
         return(
             <div className="container">
                 <MainNav />
@@ -58,6 +70,7 @@ export default class UserSignup extends React.Component {
                             <input type="password" className="form-control" id="password" value={this.state.password} onChange={this.handlePWChange.bind(this)} />
                         </div>
                         {isErr}
+                        {signup}
                         <button type="submit" className="btn btn-primary">Join</button>
             <br/>
             <br/>

@@ -44,7 +44,7 @@ ReactDOM.render(
         <Route exact path="/madmin/add-movie" component={AddMovie} />
         <Route exact path="/adminlogin" component={AdminLogin} />
         <Route exact path="/madminlogin" component={MovieHallAdminLogin} />
-        <Route exact eaxct path="/admin/dashboard" component={AdminDashboard} />
+        <Route exact path="/admin/dashboard" component={AdminDashboard} />
         <Route exact path="/madmin/dashboard" component={MovieAdminDashboard} />
         <Route
           exact
