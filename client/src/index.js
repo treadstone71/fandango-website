@@ -23,6 +23,7 @@ import AddMovie from './components/MovieAdminHome/AddMovie';
 import MakePayment from './components/user/MakePayment';
 import OrderHistory from './components/user/OrderHistory';
 import EditProfile from './components/user/EditProfile.js';
+import ViewProfile from './components/user/ViewProfile.js';
 import BookTicket from './components/user/BookTicket.js';
 import UserSignup from './components/user/UserSignUp.js';
 import MoviePage from './components/homepage/MoviePage';
@@ -39,6 +40,7 @@ ReactDOM.render(
         <Route exact path="/userlogin" component={UserLogin} />
         <Route exact path="/signup" component={UserSignup} />
         <Route exact path="/editprofile" component={EditProfile} />
+        <Route exact path="/viewprofile" component={ViewProfile} />
         <Route exact path="/makepayment" component={MakePayment} />
         <Route exact path="/orderhistory" component={OrderHistory} />
         <Route exact path="/madmin/add-movie" component={AddMovie} />
