@@ -23,6 +23,7 @@ import AddMovie from './components/MovieAdminHome/AddMovie';
 import MakePayment from './components/user/MakePayment';
 import OrderHistory from './components/user/OrderHistory';
 import EditProfile from './components/user/EditProfile.js';
+import ViewProfile from './components/user/ViewProfile.js';
 import BookTicket from './components/user/BookTicket.js';
 import UserSignup from './components/user/UserSignUp.js';
 import MoviePage from './components/homepage/MoviePage';
@@ -39,12 +40,13 @@ ReactDOM.render(
         <Route exact path="/userlogin" component={UserLogin} />
         <Route exact path="/signup" component={UserSignup} />
         <Route exact path="/editprofile" component={EditProfile} />
+        <Route exact path="/viewprofile" component={ViewProfile} />
         <Route exact path="/makepayment" component={MakePayment} />
         <Route exact path="/orderhistory" component={OrderHistory} />
         <Route exact path="/madmin/add-movie" component={AddMovie} />
         <Route exact path="/adminlogin" component={AdminLogin} />
         <Route exact path="/madminlogin" component={MovieHallAdminLogin} />
-        <Route exact eaxct path="/admin/dashboard" component={AdminDashboard} />
+        <Route exact path="/admin/dashboard" component={AdminDashboard} />
         <Route exact path="/madmin/dashboard" component={MovieAdminDashboard} />
         <Route
           exact
@@ -53,7 +55,6 @@ ReactDOM.render(
         />
         <Route exact path="/admin/movie/:movie_id" component={MovieDetails} />
         <Route exact path="/admin/add-movie-hall" component={AddMovieHall} />
-        <Route exact path="/" component={HomePage} />
         <Route
           exact
           path="/admin/moviehall/:hall_id"

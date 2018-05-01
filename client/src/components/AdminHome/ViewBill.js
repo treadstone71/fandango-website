@@ -31,12 +31,14 @@ class Bill extends React.Component{
     
         if(admin.bill){
             infoEle = <div class="container">
-                            <div class="row"><div class="col-sm-3"></div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                </div>
                                 <div class="col-sm-6">
                                     <div class="card card-body bg-light">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <img src= { "http://localhost:3000/" + admin.bill.movieid + ".jpg" } alt="" class="img-rounded img-responsive" />
+                                                <img src={ "http://localhost:3000/movieimages/1002.jpeg"} alt="" class="img-rounded img-responsive" />
                                             </div>
                                             <div class="col-sm-6">
                                                 <p><b>BillingID : </b>{admin.bill.billingid}</p>

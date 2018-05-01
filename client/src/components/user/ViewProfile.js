@@ -3,7 +3,7 @@ import HomePage from '../homepage/HomePage.js';
 import '../../css/userlogin.css';
 import MainNav from '../../mainNav.js';
 
-export default class EditProfile extends React.Component {
+export default class ViewProfile extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -24,52 +24,49 @@ export default class EditProfile extends React.Component {
     return (
       <div className="container">
         <MainNav />
-        <div className="editprofile">
+        <div className="viewprofile">
           <section style={section}>
-            <h1>Edit Your Profile</h1>
+            <h1>View Your Profile</h1>
             <form onSubmit={this.handleSubmit.bind(this)}>
               <div className="form-group">
                 <label htmlFor="firstname">First Name</label>
-                <input type="text" className="form-control" id="firstname" />
+                <li className="list-group-item">firstname</li>
               </div>
               <div className="form-group">
                 <label htmlFor="lastname">Last Name</label>
-                <input type="text" className="form-control" id="lastname" />
+                <li className="list-group-item">lastname</li>
               </div>
               <div className="form-group">
                 <label htmlFor="address">Address</label>
-                <input type="text" className="form-control" id="address" />
+                <li className="list-group-item">address</li>
               </div>
               <div className="form-group">
                 <label htmlFor="city">City</label>
-                <input type="text" className="form-control" id="city" />
+                <li className="list-group-item">city</li>
               </div>
               <div className="form-group">
                 <label htmlFor="state">State</label>
-                <input type="text" className="form-control" id="state" />
+                <li className="list-group-item">state</li>
               </div>
               <div className="form-group">
                 <label htmlFor="zipcode">Zip Code</label>
-                <input type="text" className="form-control" id="zipcode" />
+                <li className="list-group-item">zip</li>
               </div>
               <div className="form-group">
                 <label htmlFor="phonenumber">Phone Number</label>
-                <input type="text" className="form-control" id="phonenumber" />
+                <li className="list-group-item">phone</li>
               </div>
               <div className="form-group">
                 <label htmlFor="email">Email</label>
-                <input type="text" className="form-control" id="email" />
+                <li className="list-group-item">email</li>
               </div>
               <div className="form-group">
                 <label htmlFor="creditcard">Credit Card Number</label>
-                <input type="text" className="form-control" id="creditcard" />
+                <li className="list-group-item">creditcardnumber</li>
               </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input type="password" className="form-control" id="password" />
-              </div>
+
               <button type="submit" className="btn btn-primary">
-                Submit
+                Return home
               </button>
             </form>
           </section>

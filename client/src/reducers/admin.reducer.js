@@ -67,6 +67,20 @@ export function admin (state = initialState, action){
                 userInfo: action.userInfo
             }
             break;
+
+            case "POSTMOVIE_SUCCESS":
+                return {
+                    ...state,
+                    movie_id:action.movie_id
+                }
+                break;
+                case "GETMOVIEREVENUE_SUCCESS":
+                    return {
+                        ...state,
+                        movie: action.movie
+                    }
+                    break;
+
         case "GETCLICKS_SUCCESS": 
             return {
                 ...state,

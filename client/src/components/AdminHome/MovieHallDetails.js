@@ -135,8 +135,7 @@ class MovieHallDetails extends React.Component{
             <div class="row">
             <div class="col-md-3">
             <div class="text-center">
-            <img src="" class="img-rounded img-responsive" alt="" />
-            <h5></h5>
+            <img src={"http://localhost:3000/movieimages/1002.jpeg"} class="img-rounded img-responsive" alt="" />
             </div>
             </div>
             <div class="col-md-9 personal-info">

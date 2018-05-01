@@ -1,12 +1,12 @@
 import React from 'react';
-import AdminNav from '../NavBars/AdminNav';
+import MovieNav from '../NavBars/MovieNav';
 import { connect } from 'react-redux';
-import { adminActions } from "../../apiActions/admin.actions.js";
+import { madminActions } from "../../apiActions/madmin.actions.js";
 import axios from 'axios';
 import { history } from '../../_helpers/history';
 var api = 'http://localhost:3000';
 
-class MovieDetails extends React.Component{
+class MovieSearchDetails extends React.Component{
     constructor(props){
         super(props);
 
@@ -31,26 +31,26 @@ class MovieDetails extends React.Component{
         const { dispatch } = this.props;
         let path = this.props.location.pathname.split('/');
         console.log(path, "this is path");
-        if(path[1] == 'admin' && path.length == 4){
-           this.getMovieInfo(path[3]);
+        if(path[1] == 'madmin' && path.length == 4){
+            this.getMovieInfo(path[3]);
         }
     }
     getMovieInfo(movie_id){
         var self = this
-            axios(api + "/admin/movie/get_movie_info?movie_id=" + movie_id, {
-                method: "get",
-                withCredentials: true
-            }). then(function(res) {
-                console.log(res.data);
-                self.setState({
-                    movie_id: res.data.movie_info.movie_id,
-                    title: res.data.movie_info.title,
-                    trailer: res.data.movie_info.trailer,
-                    characters: res.data.movie_info.characters,
-                    movie_length: res.data.movie_info.movie_length,
-                    date: res.data.movie_info.date
-                })
+        axios(api + "/madmin/movie/get_movie_info?movie_id=" + movie_id, {
+            method: "get",
+            withCredentials: true
+        }). then(function(res) {
+            console.log(res.data);
+            self.setState({
+                movie_id: res.data.movie_info.movie_id,
+                title: res.data.movie_info.title,
+                trailer: res.data.movie_info.trailer,
+                characters: res.data.movie_info.characters,
+                movie_length: res.data.movie_info.movie_length,
+                date: res.data.movie_info.date
             })
+        })
     }
 
     edit() {
@@ -78,8 +78,8 @@ class MovieDetails extends React.Component{
         const{ dispatch } = this.props;
         let path = this.props.location.pathname.split('/');
         console.log(path, "this is in handlesubmit path");
-        if(path[1] == 'admin' && path.length == 4){
-            dispatch(adminActions.UpdateMovieInfo(this.state, path[3]));
+        if(path[1] == 'madmin' && path.length == 4){
+            dispatch(madminActions.UpdateMovieInfo(this.state, path[3]));
         }
     }
 
@@ -119,7 +119,7 @@ class MovieDetails extends React.Component{
         return(
             <div className="Profile">
             <div id="ShowingBlackBackground">
-            <AdminNav />
+            <MovieNav />
             <br />
             <br />
             </div>
@@ -135,7 +135,7 @@ class MovieDetails extends React.Component{
             <div class="col-md-9 personal-info">
             <h3>Movie Info</h3>
         <form class="form-horizontal" role="form" onSubmit={this.handleSubmit}>
-        <div class="form-group">
+    <div class="form-group">
             <label class="col-lg-3 control-label">Movie Title :</label>
         <div class="col-lg-8">
             <input class="form-control" type="text"  name="title" id="title" disabled={this.state.disabled} value={this.state.title} onChange={this.handleChange} />
@@ -192,7 +192,7 @@ class MovieDetails extends React.Component{
         </div>
         </div>
         </div>
-        );
+    );
     }
 }
 function mapStateToProps(state) {
@@ -203,4 +203,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps)(MovieDetails);
+export default connect(mapStateToProps)(MovieSearchDetails);
