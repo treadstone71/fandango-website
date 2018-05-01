@@ -1,48 +1,111 @@
 import React from 'react';
-import MainNav from '../../mainNav.js';
+import UserNav from '../NavBars/UserNav.js';
 
+import { userActions } from "../../apiActions";
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class MoviePage extends React.Component {
+class MPage extends React.Component {
+
+    constructor(props){
+        super(props);
+    }
+
+    componentDidMount(){
+        const { dispatch } = this.props;
+        let path  = this.props.location.pathname.split('/');
+        if(path[1] == 'movie' && path.length == 3){
+            dispatch(userActions.moviePageDetails(path[2]));
+        }
+    }
+
     render() {
+        const { user, location } = this.props;
+        let movieele = null;
+        let hallsele = null;
+        let ratingsele = null;
+
+        if(user.movie){
+            movieele = <div class="row"><div class="col-1"></div>
+                                        <div class="col-10">
+                                            <div class="card card-body bg-light">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <img src= {"http://localhost:3000/movieimages/" + user.movie.movie_id + ".jpg"} alt="" class="img-rounded img-responsive" width="300" height="300" />
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p><a href={"/movie/"+user.movie.movie_id}><b>{user.movie.title}</b></a></p>
+                                                        <p><b>Characters : </b> {user.movie.characters.toString()} </p>
+                                                        <p><b>Movie Time : </b>{user.movie.movie_length}</p>
+                                                        <p><a href={user.movie.trailer}>Click to see trailer</a></p>
+                                                        <p><b>Available in : </b>{user.movie.seeitin.toString()}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="col-1"></div>
+                                    </div>
+
+            hallsele = user.movie.halls.map( hall => <div class="row">
+                                                <div class="col-1"></div>
+                                                <div class="col-4">
+                                                    <p><b><a href={"/moviehall/" + hall.hall_id}>{hall.name}</a></b></p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p><b>Price: </b>{"$" + hall.ticket_price}</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p><b><a href={"/bookticket/" + hall.hall_id + "/" + location.pathname.split('/')[2]}>Buy</a></b></p>
+                                                </div>
+                                                <div class="col-1"></div>
+                                            </div>)
+            ratingsele =  user.movie.reviews.map( rating => <div class="row">
+                            <div class="col-1"></div>
+                                        <div class="col-10">
+                                            <div class="card card-body bg-light">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <p><b>User : </b><a href={"/user/"+1000}>prashatnh</a></p>
+                                                        <p><b>Rating : </b>{rating.rating}</p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p>{rating.review}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="col-1"></div>
+                                        </div>
+                                )
+        }
+
         return (
             <div className="container">
-                <MainNav />
-                <div className="page">
-                    <div className="row movie-info">
-                        <div className="col-4">
-                            <img className="img-fluid" src="https://cdn.images.express.co.uk/img/dynamic/36/590x/secondary/Avengers-Infinity-War-ends-with-many-of-these-characters-dead-1322280.jpg" />
-                        </div>
-                        <div className="col-8">
-                            <h1>Avengers: Infinity War (9.0)</h1>
-                            <p>Release Date: 2018-04-25</p>
-                        </div>
-                    </div>
-                    <h2>Buy Tickets</h2>
-                    { [3,4].map((h) => 
-                    <div className="row movie-hall" key={h}>
-                        <div className="col-4">
-                            Hall Name {h}
-                        </div>
-                        <div className="col-8">
-                            {[3,4,5].map((t) => 
-                                <Link to="/bookticket/hallId/movieId/time" key={t} className="movie-time">1{t}:00pm</Link>
-                            )}
-                        </div>
-                    </div>
-                    )}
-                    <h2>Comment/Rating</h2>
-                    {[2,3].map((c) =>
-                        <div class="media" key={c}>
-                            <div class="mr-3">User name</div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Rating 8</h5>
-                                Reviews
-                            </div>
-                        </div>
-                    )}
+            <UserNav  /><br/><br/><br/>
+                {movieele}<br/><br/>
+                <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                <h4>Buy Tickets Now</h4>
                 </div>
+                <div class="col-1"></div></div>
+                {hallsele}<br/><br/>
+                <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                <h4>Reviews</h4>
+                </div>
+                <div class="col-1"></div></div>
+                {ratingsele}
             </div>
         );
     }
 }
+
+function mapStateToProps(state) {
+    const { user } = state;
+    return {
+        user
+    };
+}
+
+const MoviePage = connect(mapStateToProps)(MPage);
+export default MoviePage;

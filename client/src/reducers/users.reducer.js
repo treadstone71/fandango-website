@@ -14,6 +14,12 @@ export function user(state = initialState, action){
 				hall: action.hall
 			}
 		break;
+		case "GETMOVIEINFO_SUCCESS":
+			return {
+				...state,
+				movie: action.movie
+			}
+		break;
 		default:
             return state;
 	}

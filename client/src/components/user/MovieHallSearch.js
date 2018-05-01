@@ -1,5 +1,5 @@
 import React from 'react';
-import MainNav from '../../mainNav.js';
+import UserNav from '../NavBars/UserNav.js';
 import { connect } from 'react-redux';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import { userActions } from "../../apiActions";
@@ -127,7 +127,7 @@ class Search extends React.Component{
         }
         return (
             <div class="container">
-            <MainNav /><br/><br/><br/><br/>
+        <UserNav /><br/><br/><br/><br/>
             <div class="row"><div class="col-sm-1"></div><div class="col-sm-10">
             <Nav tabs>
               <NavItem>

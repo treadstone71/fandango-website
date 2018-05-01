@@ -33,4 +33,16 @@ router.get("/get_movie_hall", function(req, res, next){
 	});
 });
 
+router.get("/get_movie_info", function(req, res, next){
+	kafka.produce({ movieid : req.query.movieid}, 'get_movie_info', 'user_topic', 'user_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.post("/bookticket", function(req, res, next){
+	kafka.produce(req.body , 'bookticket', 'user_topic', 'user_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
 module.exports = router;

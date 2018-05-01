@@ -5,7 +5,9 @@ var api = 'http://localhost:3000';
 export const userActions = {
 	getCategory,
 	getMovieUser,
-	getHallUser
+	getHallUser,
+	moviePageDetails,
+	bookTicket
 }
 
 function getCategory(category){
@@ -59,6 +61,43 @@ function getHallUser(hallname){
             }
         }).catch(function(err) {
             dispatch({type: "GETMOVIEHALL_FAILURE"});
+        })
+    }
+}
+
+function moviePageDetails(movieid){
+	return dispatch =>{
+        axios(api + "/users/get_movie_info?movieid=" + movieid,{
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res);
+            if(res.data.status == "SUCCESS"){
+                dispatch({type: "GETMOVIEINFO_SUCCESS", movie: res.data.movie});
+            }else {
+                dispatch({type: "GETMOVIEINFO_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETMOVIEINFO_FAILURE"});
+        })
+    }
+}
+
+function bookTicket(data){
+	return dispatch => {
+        axios(api + "/users/bookticket",{
+            method: "post",
+            data: data,
+            withCredentials: true
+        }).then(function(res){
+            console.log(res);
+            if(res.data.status == "SUCCESS"){
+                dispatch({type: "BOOKTICKET_SUCCESS"});
+            }else {
+                dispatch({type: "BOOKTICKET_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "BOOKTICKET_FAILURE"});
         })
     }
 }

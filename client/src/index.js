@@ -72,7 +72,7 @@ ReactDOM.render(
         <Route exact path="/hall/:id" component={MovieHall} />
         <Route
           exact
-          path="/bookticket/:hallId/:movieId/:time"
+          path="/bookticket/:hallId/:movieId"
           component={BookTicket}
         />
 
