@@ -15,11 +15,11 @@ export default class UserSignup extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        if (this.username === '') {
+        if (this.state.username == '') {
             this.setState({err_message: "Please fill in username."});
             return;
         }
-        if (this.password === '') {
+        if (this.state.password == '') {
             this.setState({err_message: "Please fill in password."});
             return;
         }
@@ -38,6 +38,11 @@ export default class UserSignup extends React.Component {
     }
 
     render() {
+        const isErr = this.state.err_message==null? null : (
+            <div className="alert alert-success">
+                {this.state.err_message}
+            </div>
+            );
         return(
             <div className="container">
                 <MainNav />
@@ -52,9 +57,7 @@ export default class UserSignup extends React.Component {
                             <label htmlFor="password">Password</label>
                             <input type="password" className="form-control" id="password" value={this.state.password} onChange={this.handlePWChange.bind(this)} />
                         </div>
-                        <div className="alert alert-success">
-                          {this.state.err_message}
-                        </div>
+                        {isErr}
                         <button type="submit" className="btn btn-primary">Join</button>
             <br/>
             <br/>

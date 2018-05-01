@@ -40,6 +40,7 @@ ReactDOM.render(
     <Router history={history}>
     <div>
     <Route exact path="/userlogin" component={UserLogin}/>
+    <Route exact path="/signup" component={UserSignup} />
     <Route exact path="/editprofile" component={EditProfile}/>
     <Route exact path="/madmin/add-movie" component={AddMovie} />
     <Route exact path="/adminlogin" component={AdminLogin}/>
