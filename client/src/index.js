@@ -55,7 +55,6 @@ ReactDOM.render(
         />
         <Route exact path="/admin/movie/:movie_id" component={MovieDetails} />
         <Route exact path="/admin/add-movie-hall" component={AddMovieHall} />
-        <Route exact path="/" component={HomePage} />
         <Route
           exact
           path="/admin/moviehall/:hall_id"
