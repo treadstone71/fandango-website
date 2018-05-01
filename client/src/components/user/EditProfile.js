@@ -61,7 +61,7 @@ export default class EditProfile extends React.Component {
                 <input type="text" className="form-control" id="email" />
               </div>
               <div className="form-group">
-                <label htmlFor="creditcard">Credit Card</label>
+                <label htmlFor="creditcard">Credit Card Number</label>
                 <input type="text" className="form-control" id="creditcard" />
               </div>
               <div className="form-group">
