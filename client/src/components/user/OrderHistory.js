@@ -13,7 +13,8 @@ class OrderHistory extends Component {
     const section = {
       marginTop: '100px',
       borderBottom: '1px solid black',
-      marginBottom: '30px'
+      marginBottom: '30px',
+      textAlign: 'center'
     };
     const clear = {
       clear: 'both'
@@ -23,10 +24,10 @@ class OrderHistory extends Component {
         <MainNav />
         <div>
           <section style={section}>
-            <h2>orders</h2>
+            <h1>Orders</h1>
             <h3>$65.55</h3>
             <div>
-              <p style={left}>Wed, Apr 25 - #1019670897606</p>
+              <p style={left}>Wed, Apr 30 - #1019670897606</p>
               <p style={right}>VIEW ORDER</p>
               <div style={clear} />
             </div>

@@ -9,7 +9,8 @@ const inputRow = {
 };
 
 const wrapper = {
-  textAlign: 'center'
+  textAlign: 'center',
+  marginTop: '100px'
 };
 
 class MakePayment extends Component {
@@ -18,7 +19,7 @@ class MakePayment extends Component {
       <div className="container">
         <MainNav />
         <div style={wrapper}>
-          <h3>Make a Payment</h3>
+          <h1>Make a Payment</h1>
           <div style={inputRow}>
             <InputFieldLabel content={'Credit Card #'} />
             <InputField width={'200px'} />
