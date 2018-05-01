@@ -20,6 +20,12 @@ export function user(state = initialState, action){
 				movie: action.movie
 			}
 		break;
+		case "GETUSERINFO_SUCCESS":
+			return {
+				...state,
+				user: action.user
+			}
+		break;
 		default:
             return state;
 	}

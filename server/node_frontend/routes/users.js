@@ -39,8 +39,20 @@ router.get("/get_movie_info", function(req, res, next){
 	});
 });
 
-router.post("/bookticket", function(req, res, next){
-	kafka.produce(req.body , 'bookticket', 'user_topic', 'user_res', function(value){
+router.post("/bookticket", auth, function(req, res, next){
+	kafka.produce({ username : req.user.username, body : req.body} , 'bookticket', 'user_topic', 'user_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.post("/update_profile", auth, function(req, res, next){
+	kafka.produce({ body: req.body, username : req.user.username } , 'update_profile', 'user_topic', 'user_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.get("/get_user_info", function(req, res, next){
+	kafka.produce({ username : req.query.username } , 'get_user_info', 'user_topic', 'user_res', function(value){
 		res.send(JSON.stringify(value));
 	});
 });

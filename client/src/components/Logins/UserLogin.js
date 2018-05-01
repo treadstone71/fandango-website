@@ -3,9 +3,12 @@ import MainNav from '../../mainNav.js';
 import '../../css/userlogin.css';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import { apiActions } from '../../apiActions'; 
+import { connect } from 'react-redux';
+
 const api = 'http://localhost:3000';
 
-export default class UserLogin extends React.Component {
+class UserLogin extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -14,6 +17,9 @@ export default class UserLogin extends React.Component {
         err_message: null,
         isLogin: false
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUNChange = this.handleUNChange.bind(this);
+    this.handlePWChange = this.handlePWChange.bind(this);
   }
   handleUNChange(e){
       this.setState({username: e.target.value, err_message:null});
@@ -22,6 +28,10 @@ export default class UserLogin extends React.Component {
   handlePWChange(e){
       this.setState({password: e.target.value, err_message:null});
   }
+  componentDidMount(){
+        const { dispatch } = this.props;
+        dispatch(apiActions.isLoggedIn());
+    }
   handleSubmit(e) {
     e.preventDefault();
     if (this.state.username == '') {
@@ -32,13 +42,8 @@ export default class UserLogin extends React.Component {
         this.setState({err_message: "Please fill in password."});
         return;
     }
-    axios.post(api+'/login', this.state).then(res => {
-        console.log(res);
-        console.log(res.data);
-        if (res.status == 'SUCCESS' || res.state == 201) {
-            this.setState({isLogin: true});
-        }
-    });
+    const { dispatch } = this.props;
+    dispatch(apiActions.login(this.state.username, this.state.password, "user"));
     // this.setState({isLogin: true});
   }
   render() {
@@ -47,22 +52,21 @@ export default class UserLogin extends React.Component {
             {this.state.err_message}
         </div>
         );
-    const login = this.state.isLogin? (
-        <Redirect to='/'/>
-        ) : null;
+
+        if(this.props.loggedIn == false){
     return (
       <div className="container">
         <MainNav />
         <div className="userlogin">
           <h1>User Login</h1>
-          <form onSubmit={this.handleSubmit.bind(this)}>
+          <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label htmlFor="username">Username</label>
               <input
                 type="text"
                 className="form-control"
                 id="username"
-                value={this.state.username} onChange={this.handleUNChange.bind(this)} 
+                value={this.state.username} onChange={this.handleUNChange} 
                 autoFocus
               />
             </div>
@@ -71,7 +75,6 @@ export default class UserLogin extends React.Component {
               <input type="password" className="form-control" id="password" value={this.state.password} onChange={this.handlePWChange.bind(this)} />
             </div>
             {isErr}
-            {login}
             <button type="submit" className="btn btn-primary">
               Login
             </button>
@@ -83,6 +86,20 @@ export default class UserLogin extends React.Component {
           </form>
         </div>
       </div>
-    );
+      );
+  } else if(this.props.loggedIn == true){
+                return <Redirect  to = '/admin/dashboard'></Redirect>
+            } else {
+                return (null);
+            }
+    
   }
 }
+
+function mapStateToProps(state){
+    const { loggedIn } = state.authentication;
+    return {
+        loggedIn
+    }
+}
+export default connect(mapStateToProps)(UserLogin);

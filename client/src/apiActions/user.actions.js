@@ -7,7 +7,9 @@ export const userActions = {
 	getMovieUser,
 	getHallUser,
 	moviePageDetails,
-	bookTicket
+	bookTicket,
+	updateProfile,
+	getUserInfo
 }
 
 function getCategory(category){
@@ -98,6 +100,57 @@ function bookTicket(data){
             }
         }).catch(function(err) {
             dispatch({type: "BOOKTICKET_FAILURE"});
+        })
+    }
+}
+
+function updateProfile(data){
+	console.log(data);
+	return dispatch => {
+        axios(api + "/users/update_profile", {
+            method: "post",
+            data: data,
+            withCredentials: true
+        }).then(function(res){
+            console.log(res.data, data.file);
+
+            if(res.data && res.data.status == "SUCCESS"){
+            	if(data.file == null)
+            		history.push("/profile/"+res.data.username);
+                let username = res.data.username;
+                axios(api + "/userimage?username=" + username, {
+                    method: "post",
+                    data: data.file,
+                    withCredentials: true
+                }).then(function(res){
+                    console.log("Res in upload", res)
+                    history.push("/profile/" + username);
+                }).catch(function(err) {
+                    console.log("error in upload ", err);
+                })
+            } else {
+                
+            }
+        }).catch(function(err) {
+            dispatch({type: "POSTHALL_FAILURE"})
+        })
+    }
+}
+
+function getUserInfo(username){
+	return dispatch =>{
+        axios(api + "/users/get_user_info?username=" + username,{
+            method: "get",
+            withCredentials: true
+        }).then(function(res){
+            console.log(res);
+            if(res.data.status == "SUCCESS"){
+                dispatch({type: "GETUSERINFO_SUCCESS", user: res.data.user});
+            }else {
+                dispatch({type: "GETUSERINFO_FAILURE"});
+            }
+        }).catch(function(err) {
+            dispatch({type: "GETUSERINFO_FAILURE"});
         })
     }
 }

@@ -14,6 +14,8 @@ import AddMovieHall from './components/AdminHome/AddMovieHall';
 import SearchUsersBills from './components/AdminHome/SearchUsersBills';
 import ViewBill from './components/AdminHome/ViewBill';
 import UserComponent from './components/AdminHome/UserComponent';
+import Profile from './components/user/Profile'
+import EnsureLoggedInContainer from './components/EnsureLoggedIn';
 
 import SearchMovieHall from './components/AdminHome/SearchMovieHall';
 import MovieDetails from './components/AdminHome/MovieDetails';
@@ -39,13 +41,15 @@ ReactDOM.render(
       <div>
         <Route exact path="/userlogin" component={UserLogin} />
         <Route exact path="/signup" component={UserSignup} />
+        <Route exact path="/adminlogin" component={AdminLogin} />
+        <Route exact path="/madminlogin" component={MovieHallAdminLogin} />
+        <EnsureLoggedInContainer>
         <Route exact path="/editprofile" component={EditProfile} />
         <Route exact path="/viewprofile" component={ViewProfile} />
+        <Route exact path="/profile/:id" component={Profile} />
         <Route exact path="/makepayment" component={MakePayment} />
         <Route exact path="/orderhistory" component={OrderHistory} />
         <Route exact path="/madmin/add-movie" component={AddMovie} />
-        <Route exact path="/adminlogin" component={AdminLogin} />
-        <Route exact path="/madminlogin" component={MovieHallAdminLogin} />
         <Route exact path="/admin/dashboard" component={AdminDashboard} />
         <Route exact path="/madmin/dashboard" component={MovieAdminDashboard} />
         <Route
@@ -78,6 +82,7 @@ ReactDOM.render(
         />
 
         <Route exact path="/search" component={MovieHallSearch} />
+        </EnsureLoggedInContainer>
       </div>
     </Router>
   </Provider>,

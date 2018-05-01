@@ -29,7 +29,7 @@ class AdminLogin extends React.Component{
         const { username, password } = this.state;
         const { dispatch } = this.props;
         if(username && password) {
-                dispatch(apiActions.login(username, password));
+                dispatch(apiActions.login(username, password, "admin"));
         }
     }
     render(){
@@ -54,7 +54,7 @@ class AdminLogin extends React.Component{
                     </div>
                 );
             } else if(this.props.loggedIn == true){
-                return <Redirect  to = '/adminhome'></Redirect>
+                return <Redirect  to = '/admin/dashboard'></Redirect>
             } else {
                 return (null);
             }

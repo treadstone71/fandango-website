@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { apiActions } from '../../apiActions/api.actions.js';
+import { connect } from 'react-redux';
 
 class UserNav extends React.Component{
 	constructor(){
@@ -19,10 +20,11 @@ class UserNav extends React.Component{
     }
 
     render(){
+    	const { authentication } = this.props;
         return(
         	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
             <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="/"><img src="https://lh3.googleusercontent.com/gAuQ6y9UBh5E3AlJL8m383NAcoI4Gl9lM3JosyAwNfqEaj1CdoqTC8bSkymghrbY3iEa9g=s170" /></a>
+            <a class="navbar-brand js-scroll-trigger" href="/"><img src="http://localhost:3000/fandango.jpg" /></a>
             &nbsp;
             &nbsp;
             <ul class="nav navbar-nav actions ml-auto">
@@ -32,8 +34,9 @@ class UserNav extends React.Component{
            </a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/search">Search Movies/Halls</a></li>
-            <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+            <li><a class="dropdown-item" href={"/profile/"+authentication.username}>My Profile</a></li>
             <li><a class="dropdown-item" href="/purchases">Purchases</a></li>
+            <li><a class="dropdown-item" href="/editprofile">Update Profile</a></li>
         </ul>
         </li>
             </ul>
@@ -45,4 +48,10 @@ class UserNav extends React.Component{
     }
 }
 
-export default UserNav
+function mapStateToProps(state){
+    const { user, authentication } = state;
+    return {
+        user, authentication
+    }
+}
+export default connect(mapStateToProps)(UserNav);

@@ -24,7 +24,18 @@ const storage1 = multer.diskStorage({
 		cb(null, req.query.movie_id + '.jpg');
 	}
 });
-const upload1 = multer ({storage1});
+const upload1 = multer ({storage: storage1});
+
+const storage2 = multer.diskStorage({
+	destination: function(req, file, cb){
+		cb(null, './images/userimages');
+	},
+	filename: function(req, file, cb){
+		console.log("filename:", req.query.username);
+		cb(null, req.query.username + '.jpg');
+	}
+});
+const upload2 = multer ({storage: storage2});
 
 function auth(req, res, next){
 	console.log(req.user);
@@ -55,5 +66,20 @@ router.post('/movieimages', upload1.single('file'), function(req, res, next){
 	console.log("movie image upload");
 	res.send({status: "SUCCESS"});
 });
+
+router.post('/userimage', upload2.single('file'), function(req, res, next){
+	console.log("user image upload success");
+	res.send({status: "SUCCESS"});
+});
+
+router.post("/signup", function(req, res, next){
+	kafka.produce(req.body, 'signup', 'login_topic', 'login_res', function(value){
+		res.send(JSON.stringify(value));
+	});
+});
+
+router.get("/check", auth, function(req, res, next){
+	return res.send({status: "SUCCESS", username: req.user.username});
+})
 
 module.exports = router;

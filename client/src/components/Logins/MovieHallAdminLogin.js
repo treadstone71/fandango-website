@@ -29,7 +29,7 @@ class MovieHallAdminLogin extends React.Component{
         const { username, password } = this.state;
         const { dispatch } = this.props;
         if(username && password) {
-                dispatch(apiActions.login(username, password));
+                dispatch(apiActions.login(username, password, "madmin"));
         }
     }
     render(){
